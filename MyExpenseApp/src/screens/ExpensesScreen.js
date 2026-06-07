@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
@@ -12,7 +12,7 @@ import { groupExpensesByDate } from '../utils/groupByDate';
 
 /**
  * ExpensesScreen: Transaction history grouped by date.
- * Fully integrated with Spacing, Radius, and Typography constants.
+ * Enhanced with a branded header and consistent overlap styling.
  */
 const ExpensesScreen = () => {
   const { theme, isDarkMode } = useTheme();
@@ -20,25 +20,32 @@ const ExpensesScreen = () => {
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // Filter expenses based on category selection
   const filteredExpenses = useMemo(() => {
     if (selectedCategory === 'All') return expenses;
     return expenses.filter(e => e.category === selectedCategory);
   }, [expenses, selectedCategory]);
 
-  // Use our Utility to group the filtered expenses by date
   const sections = useMemo(() => groupExpensesByDate(filteredExpenses), [filteredExpenses]);
-
   const categoriesWithAll = ['All', ...CATEGORIES.map(c => c.label)];
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.bgSecondary }]} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: theme.textPrimary }]}>History</Text>
+    <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
+      <StatusBar barStyle="light-content" />
+      
+      {/* Enhanced Branded Header */}
+      <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
+        <SafeAreaView edges={['top']}>
+          <View style={styles.headerContent}>
+            <Text style={[styles.headerTitle, { color: '#FFFFFF' }]}>History</Text>
+            <Text style={[styles.headerSub, { color: '#FFFFFF', opacity: 0.8 }]}>
+              {expenses.length} Total Transactions
+            </Text>
+          </View>
+        </SafeAreaView>
       </View>
 
-      {/* Category Filter Bar */}
-      <View>
+      {/* Category Filter Bar with Overlap */}
+      <View style={styles.filterWrapper}>
         <ScrollView 
           horizontal 
           showsHorizontalScrollIndicator={false} 
@@ -52,13 +59,13 @@ const ExpensesScreen = () => {
                 styles.filterChip,
                 { 
                   backgroundColor: selectedCategory === cat ? theme.bgBrand : theme.cardBg,
-                  borderColor: theme.border 
+                  borderColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
                 }
               ]}
             >
               <Text style={[
                 styles.filterText,
-                { color: selectedCategory === cat ? theme.textInverse : theme.textSecondary }
+                { color: selectedCategory === cat ? '#FFFFFF' : theme.textSecondary }
               ]}>
                 {cat}
               </Text>
@@ -93,38 +100,38 @@ const ExpensesScreen = () => {
           </View>
         }
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: { flex: 1 },
+  headerBg: {
+    paddingBottom: 60,
+    borderBottomLeftRadius: Radius.xxl,
+    borderBottomRightRadius: Radius.xxl,
   },
-  header: {
+  headerContent: {
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.md,
-    paddingBottom: Spacing.sm,
   },
-  title: {
-    fontSize: FontSize.xxl,
-    fontWeight: FontWeight.bold,
-  },
-  filterContainer: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-  },
+  headerTitle: { fontSize: FontSize.xxl, fontWeight: FontWeight.bold },
+  headerSub: { fontSize: FontSize.sm, fontWeight: FontWeight.medium, marginTop: 2 },
+  filterWrapper: { marginTop: -30 },
+  filterContainer: { paddingHorizontal: Spacing.lg, paddingBottom: Spacing.md },
   filterChip: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
     borderRadius: Radius.full,
     marginRight: Spacing.sm,
     borderWidth: 1,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  filterText: {
-    fontSize: FontSize.sm,
-    fontWeight: FontWeight.semibold,
-  },
+  filterText: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
   sectionHeader: {
     fontSize: FontSize.xs,
     fontWeight: FontWeight.bold,
@@ -134,17 +141,9 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
     marginBottom: Spacing.sm,
   },
-  listContent: {
-    paddingBottom: 120, 
-  },
-  emptyContainer: {
-    marginTop: 100,
-    alignItems: 'center',
-    padding: Spacing.xl,
-  },
-  emptyText: {
-    fontSize: FontSize.base,
-  },
+  listContent: { paddingBottom: 120 },
+  emptyContainer: { marginTop: 100, alignItems: 'center', padding: Spacing.xl },
+  emptyText: { fontSize: FontSize.base, textAlign: 'center' },
 });
 
 export default ExpensesScreen;

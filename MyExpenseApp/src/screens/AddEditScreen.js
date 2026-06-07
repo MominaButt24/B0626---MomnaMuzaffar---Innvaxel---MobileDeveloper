@@ -7,8 +7,7 @@ import {
   TouchableOpacity, 
   ScrollView, 
   KeyboardAvoidingView, 
-  Platform,
-  Alert
+  Platform 
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -21,9 +20,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { validateExpense } from '../utils/validators';
 import { formatNumericDate } from '../utils/formatDate';
+import CustomAlert from '../components/CustomAlert';
 
 /**
- * AddEditScreen: Standardized with constants for spacing, radius, and typography.
+ * AddEditScreen: Fully standardized using constants for styling.
+ * Adapts to system Light/Dark theme.
  */
 const AddEditScreen = () => {
   const { theme, isDarkMode } = useTheme();
@@ -41,16 +42,29 @@ const AddEditScreen = () => {
   const [notes, setNotes] = useState(editingExpense?.notes || ''); 
   const [showDatePicker, setShowDatePicker] = useState(false);
   
-  const [errors, setErrors] = useState({});
+  const [alertConfig, setAlertConfig] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: null,
+  });
+
+  const showAlert = (title, message, type = 'info', onConfirm = null) => {
+    setAlertConfig({ visible: true, title, message, type, onConfirm });
+  };
+
+  const closeAlert = () => {
+    setAlertConfig(prev => ({ ...prev, visible: false }));
+  };
 
   const handleSave = () => {
     const dataToValidate = { title, amount, category, date };
     const validation = validateExpense(dataToValidate);
 
     if (!validation.isValid) {
-      setErrors(validation.errors);
       const firstError = Object.values(validation.errors)[0];
-      Alert.alert('Missing Info', firstError);
+      showAlert('Missing Info', firstError, 'error');
       return;
     }
 
@@ -68,7 +82,25 @@ const AddEditScreen = () => {
     } else {
       addExpense(expenseData);
     }
-    navigation.goBack();
+
+    showAlert(
+      'Success!', 
+      isEditing ? 'Expense updated successfully.' : 'New expense added to your history.', 
+      'success', 
+      () => navigation.goBack()
+    );
+  };
+
+  const handleDelete = () => {
+    showAlert(
+      'Are you sure?', 
+      'This transaction will be permanently removed.', 
+      'warning', 
+      () => {
+        deleteExpense(editingExpense.id);
+        navigation.goBack();
+      }
+    );
   };
 
   const onDateChange = (event, selectedDate) => {
@@ -78,7 +110,6 @@ const AddEditScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.bgPrimary }]} edges={['top', 'bottom']}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -91,14 +122,13 @@ const AddEditScreen = () => {
 
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+        style={styles.flex}
       >
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           
-          {/* Title Input */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Title</Text>
-            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
+            <View style={[styles.inputContainer, { backgroundColor: theme.bgSecondary }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary }]}
                 placeholder="e.g. Shopping"
@@ -109,10 +139,9 @@ const AddEditScreen = () => {
             </View>
           </View>
 
-          {/* Amount Input */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Amount</Text>
-            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
+            <View style={[styles.inputContainer, { backgroundColor: theme.bgSecondary }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary }]}
                 placeholder="Rs 0.00"
@@ -124,11 +153,10 @@ const AddEditScreen = () => {
             </View>
           </View>
 
-          {/* Date Picker Field */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Date</Text>
             <TouchableOpacity 
-              style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}
+              style={[styles.inputContainer, { backgroundColor: theme.bgSecondary }]}
               onPress={() => setShowDatePicker(true)}
             >
               <Text style={[styles.dateText, { color: theme.textPrimary }]}>
@@ -147,10 +175,9 @@ const AddEditScreen = () => {
             />
           )}
 
-          {/* Notes (Optional Requirement) */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Notes (Optional)</Text>
-            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC', height: 80, alignItems: 'flex-start', paddingVertical: Spacing.sm }]}>
+            <View style={[styles.inputContainer, { backgroundColor: theme.bgSecondary, height: 80, alignItems: 'flex-start', paddingVertical: Spacing.sm }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary, height: '100%' }]}
                 placeholder="Add details..."
@@ -162,7 +189,6 @@ const AddEditScreen = () => {
             </View>
           </View>
 
-          {/* Categories Grid */}
           <Text style={[styles.label, { color: theme.textPrimary, marginTop: Spacing.sm }]}>Category</Text>
           <View style={styles.categoryGrid}>
             {CATEGORIES.map((cat) => {
@@ -175,13 +201,13 @@ const AddEditScreen = () => {
                 >
                   <View style={[
                     styles.categoryIconCircle, 
-                    { backgroundColor: isActive ? '#3B82F6' : (isDarkMode ? '#1E222E' : cat.color + '15') }
+                    { backgroundColor: isActive ? theme.bgBrand : (isDarkMode ? theme.bgTertiary : cat.color + '15') }
                   ]}>
-                    <Ionicons name={cat.icon} size={24} color={isActive ? '#FFF' : cat.color} />
+                    <Ionicons name={cat.icon} size={24} color={isActive ? theme.textInverse : cat.color} />
                   </View>
                   <Text style={[
                     styles.categoryItemText, 
-                    { color: isActive ? '#3B82F6' : theme.textSecondary, fontWeight: isActive ? FontWeight.bold : FontWeight.medium }
+                    { color: isActive ? theme.bgBrand : theme.textSecondary, fontWeight: isActive ? FontWeight.bold : FontWeight.medium }
                   ]}>
                     {cat.label}
                   </Text>
@@ -190,34 +216,36 @@ const AddEditScreen = () => {
             })}
           </View>
 
-          {/* Save Button */}
           <TouchableOpacity 
-            style={[styles.saveButton, { backgroundColor: '#3B82F6' }]} 
+            style={[styles.saveButton, { backgroundColor: theme.bgBrand }]} 
             onPress={handleSave}
             activeOpacity={0.8}
           >
-            <Text style={[styles.saveButtonText, { color: '#FFF' }]}>Save Transaction</Text>
+            <Text style={[styles.saveButtonText, { color: theme.textInverse }]}>Save Transaction</Text>
           </TouchableOpacity>
 
           {isEditing && (
             <TouchableOpacity 
               style={styles.deleteButton} 
-              onPress={() => {
-                deleteExpense(editingExpense.id);
-                navigation.goBack();
-              }}
+              onPress={handleDelete}
             >
               <Text style={[styles.deleteButtonText, { color: theme.danger }]}>Delete Transaction</Text>
             </TouchableOpacity>
           )}
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <CustomAlert 
+        {...alertConfig} 
+        onClose={closeAlert} 
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  flex: { flex: 1 },
   header: { 
     flexDirection: 'row', 
     alignItems: 'center', 
@@ -227,7 +255,7 @@ const styles = StyleSheet.create({
   },
   backButton: { padding: Spacing.sm },
   headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
-  scrollContent: { padding: Spacing.lg, paddingBottom: 60 },
+  scrollContent: { padding: Spacing.lg, paddingBottom: 100 },
   formGroup: { marginBottom: Spacing.lg },
   label: { fontSize: FontSize.base, fontWeight: FontWeight.bold, marginBottom: Spacing.sm },
   inputContainer: { 
@@ -257,9 +285,9 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     marginTop: Spacing.md, 
     elevation: 4, 
-    shadowColor: '#3B82F6', 
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 4 }, 
-    shadowOpacity: 0.3, 
+    shadowOpacity: 0.1, 
     shadowRadius: 8 
   },
   saveButtonText: { fontSize: FontSize.md, fontWeight: FontWeight.bold },

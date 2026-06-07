@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
@@ -8,14 +8,15 @@ import { FontSize, FontWeight } from '../constants/typography';
 import StatCard from '../components/StatCard';
 import ExpenseCard from '../components/ExpenseCard';
 import FAB from '../components/FAB';
+import CustomAlert from '../components/CustomAlert';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * HomeScreen: The main dashboard.
  * Standardized using Spacing, Radius, and Typography constants.
+ * Integrated with CustomAlert for a consistent and beautiful UI.
  */
 const HomeScreen = () => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
@@ -32,34 +33,48 @@ const HomeScreen = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [newBudget, setNewBudget] = useState(totalIncome.toString());
+  
+  // Custom Alert State
+  const [alertConfig, setAlertConfig] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: null,
+    confirmText: 'OK'
+  });
 
-  const recentExpenses = expenses.slice(0, 4);
+  const showAlert = (title, message, type = 'info', onConfirm = null, confirmText = 'OK') => {
+    setAlertConfig({ visible: true, title, message, type, onConfirm, confirmText });
+  };
+
+  const closeAlert = () => {
+    setAlertConfig(prev => ({ ...prev, visible: false }));
+  };
+
+  const recentExpenses = expenses.slice(0, 5);
 
   const handleUpdateBudget = () => {
     const amount = parseFloat(newBudget);
     if (isNaN(amount) || amount < 0) {
-      Alert.alert('Invalid Amount', 'Please enter a valid positive number.');
+      showAlert('Invalid Amount', 'Please enter a valid positive number.', 'error');
       return;
     }
     setIncome(amount);
     setModalVisible(false);
+    showAlert('Success', 'Your monthly budget has been updated.', 'success');
   };
 
   const handleResetApp = () => {
-    Alert.alert(
+    showAlert(
       "Reset Profile?", 
       "This will clear your name and take you back to the onboarding screen immediately.",
-      [
-        { text: "Cancel", style: "cancel" },
-        { 
-          text: "Reset", 
-          style: "destructive", 
-          onPress: async () => {
-            await resetOnboarding();
-            setModalVisible(false);
-          } 
-        }
-      ]
+      "warning",
+      async () => {
+        await resetOnboarding();
+        setModalVisible(false);
+      },
+      "Reset"
     );
   };
 
@@ -201,6 +216,11 @@ const HomeScreen = () => {
           </View>
         </View>
       </Modal>
+
+      <CustomAlert 
+        {...alertConfig} 
+        onClose={closeAlert} 
+      />
 
       <FAB onPress={() => navigation.navigate('AddExpense')} />
     </View>

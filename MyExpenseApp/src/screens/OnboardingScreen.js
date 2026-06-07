@@ -16,21 +16,22 @@ import { Spacing, Radius } from '../constants/spacing';
 import { FontSize, FontWeight } from '../constants/typography';
 import { useExpenses } from '../context/ExpenseContext';
 import { Ionicons } from '@expo/vector-icons';
+import CustomAlert from '../components/CustomAlert';
 
 const { width } = Dimensions.get('window');
 
 /**
- * OnboardingScreen: The first screen a new user sees.
- * Branded as "SpendWise" and standardized with constants.
+ * OnboardingScreen: Standardized with constants and CustomAlert.
  */
 const OnboardingScreen = () => {
   const { theme, isDarkMode } = useTheme();
   const { completeOnboarding } = useExpenses(); 
   const [name, setName] = useState('');
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const handleGetStarted = () => {
     if (!name.trim()) {
-      alert('Please enter your name to continue.');
+      setAlertVisible(true);
       return;
     }
     completeOnboarding(name.trim());
@@ -90,6 +91,14 @@ const OnboardingScreen = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <CustomAlert 
+        visible={alertVisible}
+        title="Whoops!"
+        message="Please enter your name so we can personalize your experience."
+        type="warning"
+        onClose={() => setAlertVisible(false)}
+      />
     </SafeAreaView>
   );
 };

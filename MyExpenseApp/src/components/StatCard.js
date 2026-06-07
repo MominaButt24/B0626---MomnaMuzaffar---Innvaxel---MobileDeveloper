@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Spacing, Radius, Shadow } from '../constants/spacing';
 import { FontSize, FontWeight } from '../constants/typography';
@@ -9,6 +9,8 @@ import { formatCurrency } from '../utils/formatCurrency';
 /**
  * StatCard component: Standardized with constants.
  * The card color is now adaptable to the active theme while maintaining focus.
+ * User icon is positioned on the right, opposite to the balance amount, 
+ * styled clearly as a PNG like in the Summary Screen.
  */
 const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) => {
   const { theme } = useTheme();
@@ -23,19 +25,32 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) 
       { backgroundColor: theme.bgBrandElevated },
       Shadow.md
     ]}>
+      {/* Top Row: Label and Menu */}
       <View style={styles.topRow}>
-        <Text style={[styles.cardLabel, { color: theme.textInverse, opacity: 0.8 }]}>{title}</Text>
+        <View style={styles.titleSection}>
+          <View style={styles.headerDot} />
+          <Text style={[styles.cardLabel, { color: theme.textInverse, opacity: 0.8 }]}>{title}</Text>
+        </View>
         <TouchableOpacity onPress={onMenuPress} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
           <Ionicons name="ellipsis-horizontal" size={FontSize.lg} color="rgba(255,255,255,0.6)" />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.balanceSection}>
+      {/* Middle Section: Main Balance and User PNG Icon */}
+      <View style={styles.balanceRow}>
         <Text style={[styles.balanceText, { color: theme.textInverse }]}>
           {formatCurrency(safeAmount)}
         </Text>
+        
+        {/* User PNG Icon - Positioned opposite to the amount */}
+        <Image 
+          source={require('../assets/user.png')} 
+          style={styles.userIcon}
+          resizeMode="contain"
+        />
       </View>
 
+      {/* Bottom Section: Income and Expenses */}
       <View style={styles.footerSection}>
         <View style={styles.statsRow}>
           <View style={styles.statItem}>
@@ -74,7 +89,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.xxl,
     marginHorizontal: Spacing.lg,
     marginTop: Spacing.md,
-    height: 195,
+    height: 205,
     justifyContent: 'space-between',
     elevation: 8,
     shadowColor: '#000',
@@ -87,24 +102,41 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  balanceSection: {
+  titleSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+    marginRight: Spacing.sm,
+  },
+  balanceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: -Spacing.xs,
   },
+  userIcon: {
+    width: 60,
+    height: 60,
+  },
   cardLabel: {
-    fontSize: FontSize.sm,
+    fontSize: FontSize.xs,
     fontWeight: FontWeight.semibold,
-    textTransform: 'capitalize',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   balanceText: {
     fontSize: FontSize.xxl,
     fontWeight: FontWeight.bold,
-    marginTop: Spacing.xs,
   },
   footerSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    marginTop: Spacing.sm,
   },
   statsRow: {
     flexDirection: 'row',
@@ -116,7 +148,7 @@ const styles = StyleSheet.create({
   statHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Spacing.xs,
+    marginBottom: 4,
   },
   iconCircle: {
     width: 18,
@@ -144,7 +176,7 @@ const styles = StyleSheet.create({
   circle: {
     width: 28,
     height: 28,
-    borderRadius: Radius.lg,
+    borderRadius: 14,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
@@ -13,7 +13,7 @@ import { formatCurrency } from '../utils/formatCurrency';
 
 /**
  * SummaryScreen: Provides a visual breakdown of spending by category.
- * Fully integrated with Spacing, Radius, and Typography constants.
+ * Enhanced with a branded header and visual icons.
  */
 const SummaryScreen = () => {
   const { theme, isDarkMode } = useTheme();
@@ -25,18 +25,43 @@ const SummaryScreen = () => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.bgSecondary }]} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: theme.textPrimary }]}>Statistics</Text>
+    <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
+      <StatusBar barStyle="light-content" />
+
+      {/* Enhanced Branded Header */}
+      <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
+        <SafeAreaView edges={['top']}>
+          <View style={styles.headerContent}>
+            <Text style={[styles.headerTitle, { color: theme.textInverse }]}>Statistics</Text>
+            <Text style={[styles.headerSub, { color: theme.textInverse, opacity: 0.8 }]}>
+              Spending Overview
+            </Text>
+          </View>
+        </SafeAreaView>
       </View>
       
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Total Spending Card */}
-        <View style={[styles.totalCard, { backgroundColor: '#1E293B' }]}>
-          <Text style={[styles.totalLabel, { color: 'rgba(255,255,255,0.7)' }]}>Total Spending</Text>
-          <Text style={[styles.totalAmount, { color: '#FFFFFF' }]}>
-            {formatCurrency(totalExpenses)}
-          </Text>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent} 
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Total Spending Card with PNG Icon */}
+        <View style={styles.statWrapper}>
+          <View style={[styles.totalCard, { backgroundColor: '#1E293B' }]}>
+            <View style={styles.cardTopRow}>
+              <View>
+                <Text style={[styles.totalLabel, { color: 'rgba(255,255,255,0.7)' }]}>Total Spending</Text>
+                <Text style={[styles.totalAmount, { color: '#FFFFFF' }]}>
+                  {formatCurrency(totalExpenses)}
+                </Text>
+              </View>
+              <Image 
+                source={require('../assets/financial-profit.png')} 
+                style={styles.moneyIcon}
+                resizeMode="contain"
+              />
+            </View>
+          </View>
         </View>
 
         {/* Visual Donut Chart */}
@@ -96,32 +121,85 @@ const SummaryScreen = () => {
           )}
         </View>
         
-        <View style={{ height: 100 }} />
+        <View style={{ height: 120 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  header: { paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md },
-  title: { fontSize: FontSize.xxl, fontWeight: FontWeight.bold },
-  content: { padding: Spacing.lg },
+  container: { 
+    flex: 1 
+  },
+  headerBg: {
+    paddingBottom: 60,
+    borderBottomLeftRadius: Radius.xxl,
+    borderBottomRightRadius: Radius.xxl,
+  },
+  headerContent: {
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.md,
+  },
+  headerTitle: {
+    fontSize: FontSize.xxl,
+    fontWeight: FontWeight.bold,
+  },
+  headerSub: {
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.medium,
+    marginTop: 2,
+  },
+  scrollView: {
+    flex: 1,
+    marginTop: -50,
+  },
+  scrollContent: { 
+    padding: Spacing.lg 
+  },
+  statWrapper: {
+    marginBottom: Spacing.lg,
+  },
   totalCard: {
-    padding: Spacing.xxl,
+    padding: Spacing.xl,
     borderRadius: Radius.xxl,
-    alignItems: 'center',
-    marginBottom: Spacing.md,
     elevation: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
   },
-  totalLabel: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: Spacing.xs },
-  totalAmount: { fontSize: FontSize.hero, fontWeight: FontWeight.bold },
-  chartWrapper: { alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.xl },
-  sectionTitle: { fontSize: FontSize.md, fontWeight: FontWeight.bold, marginBottom: Spacing.md, marginLeft: Spacing.xs },
+  cardTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  moneyIcon: {
+    width: 60,
+    height: 60,
+  },
+  totalLabel: { 
+    fontSize: FontSize.sm, 
+    fontWeight: FontWeight.bold, 
+    textTransform: 'uppercase', 
+    letterSpacing: 1, 
+    marginBottom: Spacing.xs 
+  },
+  totalAmount: { 
+    fontSize: FontSize.hero, 
+    fontWeight: FontWeight.bold 
+  },
+  chartWrapper: { 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginBottom: Spacing.xl,
+    marginTop: Spacing.md
+  },
+  sectionTitle: { 
+    fontSize: FontSize.md, 
+    fontWeight: FontWeight.bold, 
+    marginBottom: Spacing.md, 
+    marginLeft: Spacing.xs 
+  },
   breakdownCard: {
     padding: Spacing.lg,
     borderRadius: Radius.xl,
