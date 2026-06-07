@@ -1,40 +1,40 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Spacing, Radius, Shadow } from '../constants/spacing';
 import { Ionicons } from '@expo/vector-icons';
+import { formatCurrency } from '../utils/formatCurrency';
 
 /**
  * StatCard component updated to follow the Sky Blue / Dream theme.
- * The card color is now adaptable to the active theme while maintaining focus.
+ * Uses formatCurrency utility for consistent formatting.
+ * The menu icon triggers the budget update modal.
  */
-const StatCard = ({ title, amount = 0, income = 0, expenses = 0 }) => {
+const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) => {
   const { theme } = useTheme();
-
-  const safeAmount = Number(amount) || 0;
-  const safeIncome = Number(income) || 0;
-  const safeExpenses = Number(expenses) || 0;
 
   return (
     <View style={[
       styles.card, 
-      { backgroundColor: theme.bgBrandElevated }, // Adaptable Deep Blue (Sky Dark or Midnight Blue)
+      { backgroundColor: theme.bgBrandElevated }, // Adaptable to Sky Deep or Midnight Dark
       Shadow.md
     ]}>
       {/* Top Row: Title and Menu Icon */}
       <View style={styles.topRow}>
         <Text style={[styles.cardLabel, { color: 'rgba(255,255,255,0.8)' }]}>{title}</Text>
-        <Ionicons name="ellipsis-horizontal" size={20} color="rgba(255,255,255,0.6)" />
+        <TouchableOpacity onPress={onMenuPress} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+          <Ionicons name="ellipsis-horizontal" size={20} color="rgba(255,255,255,0.6)" />
+        </TouchableOpacity>
       </View>
 
-      {/* Middle Section: Main Balance Amount */}
+      {/* Middle Section: Main Balance */}
       <View style={styles.balanceSection}>
         <Text style={[styles.balanceText, { color: '#FFFFFF' }]}>
-          ${safeAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          {formatCurrency(amount)}
         </Text>
       </View>
 
-      {/* Bottom Section: Income (Blue) and Expenses (Rose/Pink from image) */}
+      {/* Bottom Section: Income and Expenses */}
       <View style={styles.footerSection}>
         <View style={styles.statsRow}>
           {/* Income Stat */}
@@ -45,7 +45,7 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0 }) => {
               </View>
               <Text style={styles.statLabel}>INCOME</Text>
             </View>
-            <Text style={styles.statValue}>${safeIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}</Text>
+            <Text style={styles.statValue}>{formatCurrency(income)}</Text>
           </View>
 
           {/* Expenses Stat */}
@@ -56,11 +56,11 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0 }) => {
               </View>
               <Text style={styles.statLabel}>EXPENSES</Text>
             </View>
-            <Text style={styles.statValue}>${safeExpenses.toLocaleString(undefined, { minimumFractionDigits: 2 })}</Text>
+            <Text style={styles.statValue}>{formatCurrency(expenses)}</Text>
           </View>
         </View>
 
-        {/* Decorative branding elements from the image style */}
+        {/* Decorative branding elements */}
         <View style={styles.logoContainer}>
           <View style={[styles.circle, { backgroundColor: 'rgba(255,255,255,0.2)', marginRight: -12 }]} />
           <View style={[styles.circle, { backgroundColor: 'rgba(255,255,255,0.1)' }]} />

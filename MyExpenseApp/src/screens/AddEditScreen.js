@@ -18,7 +18,8 @@ import { Spacing, Radius } from '../constants/spacing';
 import { CATEGORIES } from '../constants/categories';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { validateExpense } from '../utils/validators'; // Import our utility
+import { validateExpense } from '../utils/validators';
+import { formatNumericDate } from '../utils/formatDate';
 
 const AddEditScreen = () => {
   const { theme, isDarkMode } = useTheme();
@@ -33,9 +34,9 @@ const AddEditScreen = () => {
   const [amount, setAmount] = useState(editingExpense?.amount?.toString() || '');
   const [category, setCategory] = useState(editingExpense?.category || CATEGORIES[0].label);
   const [date, setDate] = useState(new Date(editingExpense?.date || Date.now()));
+  const [notes, setNotes] = useState(editingExpense?.notes || ''); // Requirement: Optional notes
   const [showDatePicker, setShowDatePicker] = useState(false);
   
-  // State for validation errors
   const [errors, setErrors] = useState({});
 
   const handleSave = () => {
@@ -44,9 +45,8 @@ const AddEditScreen = () => {
 
     if (!validation.isValid) {
       setErrors(validation.errors);
-      // Show the first error in an alert for immediate feedback
       const firstError = Object.values(validation.errors)[0];
-      Alert.alert('Validation Error', firstError);
+      Alert.alert('Missing Info', firstError);
       return;
     }
 
@@ -56,6 +56,7 @@ const AddEditScreen = () => {
       amount: parseFloat(amount),
       category,
       date: date.toISOString(),
+      notes: notes.trim(),
     };
 
     if (isEditing) {
@@ -68,21 +69,20 @@ const AddEditScreen = () => {
 
   const onDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
-    if (selectedDate) {
-      setDate(selectedDate);
-    }
+    if (selectedDate) setDate(selectedDate);
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.bgPrimary }]} edges={['bottom']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bgPrimary }]} edges={['top', 'bottom']}>
+      {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
           {isEditing ? 'Edit Expense' : 'Add Expense'}
         </Text>
-        <View style={{ width: 24 }} />
+        <View style={{ width: 40 }} /> 
       </View>
 
       <KeyboardAvoidingView 
@@ -94,58 +94,41 @@ const AddEditScreen = () => {
           {/* Title Input */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Title</Text>
-            <View style={[
-              styles.inputContainer, 
-              { backgroundColor: isDarkMode ? '#1E222E' : '#F5F7FA' },
-              errors.title && { borderColor: theme.danger, borderWidth: 1 }
-            ]}>
+            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary }]}
-                placeholder="e.g. Dinner"
+                placeholder="e.g. Shopping"
                 placeholderTextColor={theme.textMuted}
                 value={title}
-                onChangeText={(text) => {
-                  setTitle(text);
-                  if (errors.title) setErrors({...errors, title: null});
-                }}
+                onChangeText={setTitle}
               />
-              <Ionicons name="pencil-outline" size={20} color={theme.textMuted} />
             </View>
-            {errors.title && <Text style={[styles.errorText, { color: theme.danger }]}>{errors.title}</Text>}
           </View>
 
           {/* Amount Input */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Amount</Text>
-            <View style={[
-              styles.inputContainer, 
-              { backgroundColor: isDarkMode ? '#1E222E' : '#F5F7FA' },
-              errors.amount && { borderColor: theme.danger, borderWidth: 1 }
-            ]}>
+            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary }]}
                 placeholder="$0.00"
                 placeholderTextColor={theme.textMuted}
                 keyboardType="decimal-pad"
                 value={amount}
-                onChangeText={(text) => {
-                  setAmount(text);
-                  if (errors.amount) setErrors({...errors, amount: null});
-                }}
+                onChangeText={setAmount}
               />
             </View>
-            {errors.amount && <Text style={[styles.errorText, { color: theme.danger }]}>{errors.amount}</Text>}
           </View>
 
-          {/* Date Picker */}
+          {/* Date Picker Field */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Date</Text>
             <TouchableOpacity 
-              style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F5F7FA' }]}
+              style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}
               onPress={() => setShowDatePicker(true)}
             >
               <Text style={[styles.dateText, { color: theme.textPrimary }]}>
-                {date.toLocaleDateString()}
+                {formatNumericDate(date)}
               </Text>
               <Ionicons name="calendar-outline" size={20} color={theme.textMuted} />
             </TouchableOpacity>
@@ -155,13 +138,28 @@ const AddEditScreen = () => {
             <DateTimePicker
               value={date}
               mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              display={Platform.OS === 'ios' ? 'inline' : 'default'}
               onChange={onDateChange}
             />
           )}
 
+          {/* Notes (Optional Requirement) */}
+          <View style={styles.formGroup}>
+            <Text style={[styles.label, { color: theme.textPrimary }]}>Notes (Optional)</Text>
+            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC', height: 80, alignItems: 'flex-start', paddingVertical: 10 }]}>
+              <TextInput 
+                style={[styles.input, { color: theme.textPrimary, height: '100%' }]}
+                placeholder="Add details..."
+                placeholderTextColor={theme.textMuted}
+                value={notes}
+                onChangeText={setNotes}
+                multiline
+              />
+            </View>
+          </View>
+
           {/* Categories Grid */}
-          <Text style={[styles.label, { color: theme.textPrimary, marginTop: Spacing.md }]}>Categories</Text>
+          <Text style={[styles.label, { color: theme.textPrimary, marginTop: Spacing.sm }]}>Category</Text>
           <View style={styles.categoryGrid}>
             {CATEGORIES.map((cat) => {
               const isActive = category === cat.label;
@@ -173,20 +171,13 @@ const AddEditScreen = () => {
                 >
                   <View style={[
                     styles.categoryIconCircle, 
-                    { 
-                      backgroundColor: isActive ? theme.bgBrand : (isDarkMode ? 'rgba(255,255,255,0.05)' : cat.color + '15'),
-                      borderColor: isActive ? theme.bgBrand : 'transparent'
-                    }
+                    { backgroundColor: isActive ? '#3B82F6' : (isDarkMode ? '#1E222E' : cat.color + '15') }
                   ]}>
-                    <Ionicons 
-                      name={cat.icon} 
-                      size={24} 
-                      color={isActive ? '#FFF' : cat.color} 
-                    />
+                    <Ionicons name={cat.icon} size={24} color={isActive ? '#FFF' : cat.color} />
                   </View>
                   <Text style={[
                     styles.categoryItemText, 
-                    { color: isActive ? theme.bgBrand : theme.textSecondary, fontWeight: isActive ? '700' : '500' }
+                    { color: isActive ? '#3B82F6' : theme.textSecondary, fontWeight: isActive ? '700' : '500' }
                   ]}>
                     {cat.label}
                   </Text>
@@ -197,11 +188,11 @@ const AddEditScreen = () => {
 
           {/* Save Button */}
           <TouchableOpacity 
-            style={[styles.saveButton, { backgroundColor: theme.bgBrand }]} 
+            style={[styles.saveButton, { backgroundColor: '#3B82F6' }]} 
             onPress={handleSave}
             activeOpacity={0.8}
           >
-            <Text style={[styles.saveButtonText, { color: '#FFF' }]}>Save</Text>
+            <Text style={[styles.saveButtonText, { color: '#FFF' }]}>Save Transaction</Text>
           </TouchableOpacity>
 
           {isEditing && (
@@ -223,57 +214,21 @@ const AddEditScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    height: 56,
-  },
-  headerTitle: { fontSize: 18, fontWeight: '700' },
-  scrollContent: { padding: Spacing.lg },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.md, height: 60 },
+  backButton: { padding: 8 },
+  headerTitle: { fontSize: 20, fontWeight: '800' },
+  scrollContent: { padding: Spacing.lg, paddingBottom: 60 },
   formGroup: { marginBottom: Spacing.lg },
-  label: { fontSize: 16, fontWeight: '600', marginBottom: Spacing.sm },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 56,
-    borderRadius: Radius.md,
-    paddingHorizontal: Spacing.md,
-  },
-  input: { flex: 1, fontSize: 16, fontWeight: '500' },
-  dateText: { flex: 1, fontSize: 16, fontWeight: '500' },
-  errorText: { fontSize: 12, marginTop: 4, marginLeft: 4, fontWeight: '600' },
-  categoryGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginTop: Spacing.sm,
-  },
+  label: { fontSize: 16, fontWeight: '700', marginBottom: 8 },
+  inputContainer: { flexDirection: 'row', alignItems: 'center', height: 56, borderRadius: Radius.lg, paddingHorizontal: Spacing.md },
+  input: { flex: 1, fontSize: 16, fontWeight: '600' },
+  dateText: { flex: 1, fontSize: 16, fontWeight: '600' },
+  categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: Spacing.sm },
   categoryItem: { width: '23%', alignItems: 'center', marginBottom: Spacing.lg },
-  categoryIconCircle: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 6,
-    borderWidth: 1,
-  },
+  categoryIconCircle: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
   categoryItemText: { fontSize: 11, textAlign: 'center' },
-  saveButton: {
-    height: 56,
-    borderRadius: Radius.md,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: Spacing.xl,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  saveButtonText: { fontSize: 18, fontWeight: '700' },
+  saveButton: { height: 56, borderRadius: Radius.lg, justifyContent: 'center', alignItems: 'center', marginTop: Spacing.md, elevation: 4, shadowColor: '#3B82F6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8 },
+  saveButtonText: { fontSize: 18, fontWeight: 'bold' },
   deleteButton: { marginTop: Spacing.xl, alignItems: 'center', padding: Spacing.md },
   deleteButtonText: { fontSize: 16, fontWeight: '600' },
 });

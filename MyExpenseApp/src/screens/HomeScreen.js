@@ -9,6 +9,7 @@ import ExpenseCard from '../components/ExpenseCard';
 import FAB from '../components/FAB';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { formatCurrency } from '../utils/formatCurrency';
 
 const HomeScreen = () => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
@@ -90,6 +91,7 @@ const HomeScreen = () => {
             amount={balance} 
             income={totalIncome}
             expenses={totalExpenses}
+            onMenuPress={() => setModalVisible(true)} // Link the menu icon to the budget modal
           />
         </View>
 
@@ -116,6 +118,7 @@ const HomeScreen = () => {
           ))
         ) : (
           <View style={styles.emptyContainer}>
+            <Ionicons name="receipt-outline" size={40} color={theme.textMuted} style={{ marginBottom: 10 }} />
             <Text style={[styles.emptyText, { color: theme.textSecondary }]}>
               No expenses yet. Tap + to add one!
             </Text>
@@ -123,7 +126,7 @@ const HomeScreen = () => {
         )}
         
         {/* Extra padding at bottom for FAB/Tabs */}
-        <View style={{ height: 100 }} />
+        <View style={{ height: 120 }} />
       </ScrollView>
 
       {/* Budget Update Modal */}
@@ -134,13 +137,13 @@ const HomeScreen = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: theme.cardBg }]}>
+          <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#1E293B' : '#FFFFFF' }]}>
             <Text style={[styles.modalTitle, { color: theme.textPrimary }]}>Update Monthly Budget</Text>
             <Text style={[styles.modalSub, { color: theme.textSecondary }]}>Enter your total income or budget for this month.</Text>
             
             <TextInput
               style={[styles.budgetInput, { 
-                backgroundColor: theme.bgSecondary, 
+                backgroundColor: isDarkMode ? '#0F172A' : '#F8FAFC', 
                 color: theme.textPrimary,
                 borderColor: theme.border
               }]}
@@ -210,7 +213,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginTop: -60, // Pulls content up into the header area
+    marginTop: -60,
   },
   scrollContent: {
     paddingBottom: Spacing.xl,
@@ -244,7 +247,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
@@ -254,10 +257,6 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg,
     padding: Spacing.xl,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
     elevation: 10,
   },
   modalTitle: {
@@ -284,8 +283,9 @@ const styles = StyleSheet.create({
   modalButtons: {
     flexDirection: 'row',
     borderTopWidth: 0.5,
-    borderColor: '#eee',
-    width: '100%',
+    borderColor: 'rgba(150,150,150,0.2)',
+    width: '120%',
+    marginHorizontal: -Spacing.xl,
   },
   modalButton: {
     flex: 1,
