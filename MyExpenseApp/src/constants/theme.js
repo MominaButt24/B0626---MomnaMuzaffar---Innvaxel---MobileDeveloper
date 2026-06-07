@@ -1,6 +1,5 @@
 // src/constants/theme.js
-// Light and dark token maps built from the palette.
-// Import useTheme() hook to access the active theme in components.
+// Theme tokens inspired by the sky blue / dream image provided.
 
 import palette from './colors';
 
@@ -9,139 +8,137 @@ export const lightTheme = {
 
   // Backgrounds
   bgPrimary:   palette.white,
-  bgSecondary: palette.gray50,
-  bgTertiary:  palette.gray100,
+  bgSecondary: palette.skyLight, // Soft sky blue from image
+  bgTertiary:  palette.skyBase,
   bgElevated:  palette.white,
 
-  // Teal header background (home screen top)
-  bgBrand:         palette.teal400,
-  bgBrandSurface:  'rgba(0, 61, 56, 0.12)',
-  bgBrandElevated: palette.teal600,
+  // Header / Brand areas
+  bgBrand:         palette.skyDeep, // Vibrant sky blue
+  bgBrandSurface:  'rgba(79, 195, 247, 0.1)',
+  bgBrandElevated: palette.skyDark,
 
   // Text
   textPrimary:   palette.gray800,
   textSecondary: palette.gray500,
-  textMuted:     palette.gray400,
+  textMuted:     palette.gray300,
   textInverse:   palette.white,
-  textBrand:     palette.teal600,
-  textOnBrand:   palette.teal900,
+  textBrand:     palette.skyDark,
+  textOnBrand:   palette.white,
 
   // Borders
-  border:       palette.gray200,
-  borderStrong: palette.gray300,
+  border:       palette.gray100,
+  borderStrong: palette.skyBase,
 
   // Semantic
-  danger:      palette.red400,
-  dangerBg:    palette.red100,
-  success:     palette.green400,
-  successBg:   palette.green100,
-  warning:     palette.amber400,
-  warningBg:   palette.amber100,
+  danger:      palette.dreamRose, // Pinkish red from image
+  dangerBg:    '#FFEBEE',
+  success:     palette.success,
+  successBg:   '#E8F5E9',
+  warning:     palette.warning,
+  warningBg:   '#FFF3E0',
 
-  // Nav & chrome
+  // Nav
   navBg:        palette.white,
-  navBorder:    palette.gray200,
-  navIconActive:palette.teal400,
+  navBorder:    palette.skyLight,
+  navIconActive:palette.skyDark,
   navIconIdle:  palette.gray300,
 
-  // Card
+  // Card (for list items)
   cardBg:       palette.white,
-  cardBorder:   palette.gray200,
+  cardBorder:   palette.gray50,
 
   // Input
-  inputBg:      palette.gray100,
-  inputBorder:  palette.gray200,
-  inputFocusBorder: palette.teal400,
-  inputFocusBg: palette.tealSubtle,
-  placeholder:  palette.gray400,
+  inputBg:      palette.gray50,
+  inputBorder:  palette.gray100,
+  inputFocusBorder: palette.skyDeep,
+  inputFocusBg: palette.skyLight,
+  placeholder:  palette.gray300,
 
   // FAB
-  fabBg:    palette.teal400,
-  fabIcon:  palette.teal900,
+  fabBg:    palette.skyDark,
+  fabIcon:  palette.white,
 
-  // Amount (expense list)
-  amountNegative: palette.red400,
+  amountNegative: palette.dreamRose,
 };
 
 export const darkTheme = {
   dark: true,
 
   // Backgrounds
-  bgPrimary:   palette.dark900,
-  bgSecondary: palette.dark800,
-  bgTertiary:  palette.dark700,
-  bgElevated:  palette.dark600,
+  bgPrimary:   palette.gray900,
+  bgSecondary: palette.darkSurface,
+  bgTertiary:  palette.darkElevated,
+  bgElevated:  palette.gray800,
 
-  // Teal header — darker variant on dark mode
-  bgBrand:         '#0A2E2B',
-  bgBrandSurface:  'rgba(10, 191, 175, 0.10)',
-  bgBrandElevated: '#0D3B36',
+  // Header / Brand
+  bgBrand:         '#01579B', // Very deep sky blue
+  bgBrandSurface:  'rgba(2, 136, 209, 0.1)',
+  bgBrandElevated: '#002F6C',
 
   // Text
-  textPrimary:   '#F1F5F9',
-  textSecondary: '#94A3B8',
-  textMuted:     '#475569',
-  textInverse:   palette.gray800,
-  textBrand:     palette.teal400,
-  textOnBrand:   '#E0FAF8',
+  textPrimary:   palette.skyLight, // High contrast light blue
+  textSecondary: palette.gray300,
+  textMuted:     palette.gray500,
+  textInverse:   palette.white,
+  textBrand:     palette.skyDeep,
+  textOnBrand:   palette.white,
 
   // Borders
-  border:       palette.dark700,
-  borderStrong: palette.gray700,
+  border:       palette.gray700,
+  borderStrong: palette.gray600,
 
   // Semantic
-  danger:      palette.red400,
-  dangerBg:    '#2A0A0A',
-  success:     palette.green400,
-  successBg:   '#0A2314',
-  warning:     palette.amber400,
-  warningBg:   '#2A1A00',
+  danger:      palette.dreamPink,
+  dangerBg:    '#2C0D0D',
+  success:     palette.success,
+  successBg:   '#0D2C0D',
+  warning:     palette.warning,
+  warningBg:   '#2C1A0D',
 
-  // Nav & chrome
-  navBg:        palette.dark900,
-  navBorder:    palette.dark700,
-  navIconActive:palette.teal400,
-  navIconIdle:  palette.gray700,
+  // Nav
+  navBg:        palette.gray900,
+  navBorder:    palette.darkSurface,
+  navIconActive:palette.skyDeep,
+  navIconIdle:  palette.gray600,
 
   // Card
-  cardBg:       palette.dark800,
-  cardBorder:   palette.dark700,
+  cardBg:       palette.darkSurface,
+  cardBorder:   palette.gray700,
 
   // Input
-  inputBg:      palette.dark700,
-  inputBorder:  palette.dark600,
-  inputFocusBorder: palette.teal400,
-  inputFocusBg: '#0A2E2B',
-  placeholder:  palette.gray700,
+  inputBg:      palette.gray800,
+  inputBorder:  palette.gray700,
+  inputFocusBorder: palette.skyDeep,
+  inputFocusBg: palette.darkElevated,
+  placeholder:  palette.gray500,
 
   // FAB
-  fabBg:    palette.teal400,
-  fabIcon:  palette.teal900,
+  fabBg:    palette.skyDeep,
+  fabIcon:  palette.white,
 
-  // Amount
-  amountNegative: '#F87171',
+  amountNegative: palette.dreamPink,
 };
 
-// Category colors — both modes in one place
+// Category colors updated to match the dream/sky palette
 export const categoryTheme = {
   light: {
-    Food:          { bg: '#FFF3E0', text: '#C2410C', dot: palette.orange400 },
-    Transport:     { bg: '#EFF6FF', text: '#1D4ED8', dot: palette.blue400   },
-    Utilities:     { bg: '#F5F3FF', text: '#6D28D9', dot: palette.purple400 },
-    Health:        { bg: '#F0FDF4', text: '#15803D', dot: palette.green400  },
-    Entertainment: { bg: '#FDF4FF', text: '#A21CAF', dot: palette.pink400   },
-    Shopping:      { bg: '#FFF1F2', text: '#BE123C', dot: palette.rose400   },
-    Education:     { bg: '#EEF2FF', text: '#3730A3', dot: palette.indigo400 },
-    Other:         { bg: palette.gray100, text: palette.gray500, dot: palette.slate400 },
+    Food:          { bg: '#FFEBEE', text: '#D32F2F', dot: palette.dreamPink },
+    Transport:     { bg: '#E1F5FE', text: '#0288D1', dot: palette.skyDeep   },
+    Utilities:     { bg: '#F3E5F5', text: '#7B1FA2', dot: '#BA68C8' },
+    Health:        { bg: '#E8F5E9', text: '#388E3C', dot: palette.success  },
+    Entertainment: { bg: '#FFF3E0', text: '#F57C00', dot: palette.warning   },
+    Shopping:      { bg: '#FCE4EC', text: '#C2185B', dot: '#F06292'   },
+    Education:     { bg: '#E8EAF6', text: '#303F9F', dot: '#7986CB' },
+    Other:         { bg: palette.gray100, text: palette.gray500, dot: palette.gray400 },
   },
   dark: {
-    Food:          { bg: '#2D1A0A', text: '#FB923C', dot: palette.orange400 },
-    Transport:     { bg: '#0A1929', text: '#60A5FA', dot: palette.blue400   },
-    Utilities:     { bg: '#1E1040', text: '#A78BFA', dot: palette.purple400 },
-    Health:        { bg: '#0A2314', text: '#4ADE80', dot: palette.green400  },
-    Entertainment: { bg: '#2A0A2E', text: '#E879F9', dot: palette.pink400   },
-    Shopping:      { bg: '#2A0A10', text: '#FB7185', dot: palette.rose400   },
-    Education:     { bg: '#0A102A', text: '#818CF8', dot: palette.indigo400 },
-    Other:         { bg: palette.dark700, text: palette.gray400, dot: palette.slate400 },
+    Food:          { bg: '#3E1010', text: '#FF8A80', dot: palette.dreamPink },
+    Transport:     { bg: '#0D2C3E', text: '#81D4FA', dot: palette.skyDeep   },
+    Utilities:     { bg: '#2C103E', text: '#E1BEE7', dot: '#BA68C8' },
+    Health:        { bg: '#103E10', text: '#A5D6A7', dot: palette.success  },
+    Entertainment: { bg: '#3E2410', text: '#FFCC80', dot: palette.warning   },
+    Shopping:      { bg: '#3E102C', text: '#F48FB1', dot: '#F06292'   },
+    Education:     { bg: '#10173E', text: '#C5CAE9', dot: '#7986CB' },
+    Other:         { bg: palette.gray700, text: palette.gray300, dot: palette.gray500 },
   },
 };

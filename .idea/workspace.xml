@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0ccee89a-84dd-40a1-aa42-3920d07c16f4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/MyExpenseApp/babel.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/FAB.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/FAB.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/StatCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/StatCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/constants/colors.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/constants/colors.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/constants/theme.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/constants/theme.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/context/ThemeContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/context/ThemeContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/navigation/TabNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/navigation/TabNavigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/ExpensesScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/ExpensesScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="3ElIYilc9zsEV91xDPmibR0n4Ra" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/BM/Desktop/MyExpenseApp&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\BM\Desktop\MyExpenseApp\src" />
+    </key>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0ccee89a-84dd-40a1-aa42-3920d07c16f4" name="Changes" comment="" />
+      <created>1780746779242</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1780746779242</updated>
+    </task>
+    <servers />
+  </component>
+</project>

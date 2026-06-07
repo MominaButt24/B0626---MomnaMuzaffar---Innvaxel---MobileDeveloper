@@ -1,49 +1,41 @@
 // src/constants/colors.js
-// Raw color palette — never import this directly in components.
-// Always use the theme tokens from src/constants/theme.js instead.
+// Raw color palette inspired by the sky blue / dream theme.
 
 const palette = {
-  // Brand
-  teal400:  '#0ABFAF',
-  teal600:  '#007A71',
-  teal900:  '#003D38',
-  tealLight:'#CCFAF6',
-  tealSubtle:'#F0FDFB',
+  // Brand / Sky Theme
+  skyLight:   '#E0F7FA', // Very light blue
+  skyBase:    '#B2EBF2', // Light sky blue
+  skyDeep:    '#4FC3F7', // Medium sky blue
+  skyDark:    '#0288D1', // Deep blue
+  
+  // Pinkish / Red Accents from the image
+  dreamPink:  '#FF8A80',
+  dreamRose:  '#FF5252',
+  dreamPurple: '#8B5CF6', // Vibrant purple for the FAB
 
   // Neutrals
-  white:    '#FFFFFF',
-  gray50:   '#F8FAFC',
-  gray100:  '#F1F5F9',
-  gray200:  '#E2E8F0',
-  gray300:  '#CBD5E1',
-  gray400:  '#94A3B8',
-  gray500:  '#64748B',
-  gray700:  '#334155',
-  gray800:  '#1E293B',
-  gray900:  '#0F172A',
+  white:      '#FFFFFF',
+  offWhite:   '#F8FAFC',
+  gray50:     '#F1F5F9',
+  gray100:    '#E2E8F0',
+  gray200:    '#CBD5E1',
+  gray300:    '#94A3B8',
+  gray400:    '#64748B',
+  gray500:    '#475569',
+  gray600:    '#334155',
+  gray700:    '#1E293B',
+  gray800:    '#0F172A',
+  gray900:    '#020617',
 
-  // Dark surfaces
-  dark900:  '#0D1117',
-  dark800:  '#161B22',
-  dark700:  '#1E293B',
-  dark600:  '#263044',
+  // Dark surfaces (Midnight Blue/Navy)
+  darkSurface: '#0F172A',
+  darkElevated: '#1E293B',
 
   // Semantic
-  red400:   '#EF4444',
-  red100:   '#FEE2E2',
-  green400: '#22C55E',
-  green100: '#DCFCE7',
-  amber400: '#F59E0B',
-  amber100: '#FEF3C7',
-
-  // Category dots
-  orange400: '#F97316',
-  blue400:   '#3B82F6',
-  purple400: '#8B5CF6',
-  pink400:   '#D946EF',
-  rose400:   '#F43F5E',
-  indigo400: '#6366F1',
-  slate400:  '#94A3B8',
+  danger:     '#EF4444',
+  success:    '#22C55E',
+  warning:    '#F59E0B',
+  info:       '#3B82F6',
 };
 
 export default palette;

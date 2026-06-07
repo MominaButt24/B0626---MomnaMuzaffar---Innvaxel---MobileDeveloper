@@ -4,8 +4,8 @@
     "slug": "MyExpenseApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": false,
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"

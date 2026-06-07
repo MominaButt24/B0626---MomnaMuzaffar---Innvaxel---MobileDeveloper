@@ -1,19 +1,25 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
-import { Radius, Shadow } from '../constants/spacing';
+import { Shadow } from '../constants/spacing';
+
+const { width } = Dimensions.get('window');
 
 const FAB = ({ onPress, icon = 'add' }) => {
   const { theme } = useTheme();
 
   return (
     <TouchableOpacity 
-      style={[styles.container, { backgroundColor: theme.fabBg }, Shadow.md]}
+      style={[
+        styles.container, 
+        { backgroundColor: theme.fabBg, left: width / 2 - 28 }, 
+        Shadow.md
+      ]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Ionicons name={icon} size={30} color={theme.fabIcon} />
+      <Ionicons name={icon} size={32} color={theme.fabIcon} />
     </TouchableOpacity>
   );
 };
@@ -26,8 +32,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 20,
-    right: 20,
+    bottom: 34, // Positioned to sit nicely above the tab bar
+    zIndex: 1000,
   },
 });
 

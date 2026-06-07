@@ -1,8 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
-import { Spacing } from '../constants/spacing';
+import { Spacing, Radius } from '../constants/spacing';
+import { CATEGORIES } from '../constants/categories';
 import ExpenseCard from '../components/ExpenseCard';
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,15 +12,54 @@ const ExpensesScreen = () => {
   const { theme } = useTheme();
   const { expenses } = useExpenses();
   const navigation = useNavigation();
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  // Filter logic
+  const filteredExpenses = useMemo(() => {
+    if (selectedCategory === 'All') return expenses;
+    return expenses.filter(e => e.category === selectedCategory);
+  }, [expenses, selectedCategory]);
+
+  const categoriesWithAll = ['All', ...CATEGORIES.map(c => c.label)];
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bgSecondary }]} edges={['top']}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: theme.textPrimary }]}>All Expenses</Text>
+        <Text style={[styles.title, { color: theme.textPrimary }]}>History</Text>
+      </View>
+
+      {/* Category Filter Bar */}
+      <View>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false} 
+          contentContainerStyle={styles.filterContainer}
+        >
+          {categoriesWithAll.map((cat) => (
+            <TouchableOpacity
+              key={cat}
+              onPress={() => setSelectedCategory(cat)}
+              style={[
+                styles.filterChip,
+                { 
+                  backgroundColor: selectedCategory === cat ? theme.bgBrand : theme.cardBg,
+                  borderColor: theme.border 
+                }
+              ]}
+            >
+              <Text style={[
+                styles.filterText,
+                { color: selectedCategory === cat ? theme.textInverse : theme.textSecondary }
+              ]}>
+                {cat}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
       
       <FlatList
-        data={expenses}
+        data={filteredExpenses}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ExpenseCard 
@@ -30,7 +71,9 @@ const ExpensesScreen = () => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={[styles.emptyText, { color: theme.textSecondary }]}>
-              No expenses recorded yet.
+              {selectedCategory === 'All' 
+                ? "No expenses recorded yet." 
+                : `No expenses in ${selectedCategory}.`}
             </Text>
           </View>
         }
@@ -44,15 +87,31 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    padding: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.sm,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
   },
+  filterContainer: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+  },
+  filterChip: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.full,
+    marginRight: Spacing.sm,
+    borderWidth: 1,
+  },
+  filterText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
   listContent: {
-    paddingBottom: Spacing.xl,
+    paddingBottom: 100,
   },
   emptyContainer: {
     marginTop: 100,
