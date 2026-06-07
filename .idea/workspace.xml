@@ -5,33 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ccee89a-84dd-40a1-aa42-3920d07c16f4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MyExpenseApp/babel.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.claude/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/babel.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/AppText.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/ExpenseCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/ExpenseCard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/FAB.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/FAB.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/StatCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/StatCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/constants/colors.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/constants/colors.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/constants/theme.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/constants/theme.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/context/ThemeContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/context/ThemeContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/SummaryDonut.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/SummaryDonut.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/constants/categories.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/constants/categories.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/navigation/AppNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/navigation/AppNavigator.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/navigation/TabNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/navigation/TabNavigator.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/ExpensesScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/ExpensesScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/utils/validators.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/utils/validators.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

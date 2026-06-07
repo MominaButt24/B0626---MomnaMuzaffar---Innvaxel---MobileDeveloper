@@ -3,38 +3,57 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Spacing, Radius, Shadow } from '../constants/spacing';
 import { CATEGORIES } from '../constants/categories';
+import { Ionicons } from '@expo/vector-icons';
+import { formatCurrency } from '../utils/formatCurrency';
+import { formatDate } from '../utils/formatDate';
 
+/**
+ * Enhanced ExpenseCard Component
+ * Uses icons instead of emojis and follows the Sky/Dream theme.
+ * Integrated with utility functions for consistent formatting.
+ */
 const ExpenseCard = ({ expense, onPress }) => {
-  const { theme } = useTheme();
+  const { theme, isDarkMode } = useTheme();
   
-  const categoryData = CATEGORIES.find(c => c.label === expense.category);
-  const emoji = categoryData ? categoryData.emoji : '💰';
+  const categoryData = CATEGORIES.find(c => c.label === expense.category) || CATEGORIES[CATEGORIES.length - 1];
+  const iconName = categoryData.icon;
+  const iconColor = categoryData.color;
 
   return (
     <TouchableOpacity 
-      style={[styles.container, { backgroundColor: theme.cardBg }, Shadow.sm]}
+      style={[
+        styles.container, 
+        { backgroundColor: theme.cardBg }, 
+        Shadow.sm
+      ]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       <View style={styles.leftContent}>
-        <View style={[styles.iconContainer, { backgroundColor: theme.bgSecondary }]}>
-          <Text style={styles.emoji}>{emoji}</Text>
+        {/* Themed Icon Container */}
+        <View style={[
+          styles.iconCircle, 
+          { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : iconColor + '15' }
+        ]}>
+          <Ionicons name={iconName} size={22} color={iconColor} />
         </View>
+
         <View style={styles.textContainer}>
           <Text style={[styles.title, { color: theme.textPrimary }]} numberOfLines={1}>
             {expense.title}
           </Text>
           <Text style={[styles.date, { color: theme.textSecondary }]}>
-            {new Date(expense.date).toLocaleDateString(undefined, { 
-              month: 'short', 
-              day: 'numeric' 
-            })}
+            {formatDate(expense.date)}
           </Text>
         </View>
       </View>
-      <Text style={[styles.amount, { color: theme.amountNegative }]}>
-        -${Number(expense.amount).toFixed(2)}
-      </Text>
+
+      <View style={styles.rightContent}>
+        <Text style={[styles.amount, { color: theme.danger }]}>
+          -{formatCurrency(expense.amount)}
+        </Text>
+        <Ionicons name="chevron-forward" size={16} color={theme.textMuted} style={{ marginLeft: 4 }} />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -54,31 +73,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  iconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: Radius.md,
+  iconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.md,
-  },
-  emoji: {
-    fontSize: 20,
   },
   textContainer: {
     flex: 1,
   },
   title: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     marginBottom: 2,
   },
   date: {
     fontSize: 12,
+    fontWeight: '500',
+  },
+  rightContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   amount: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
   },
 });
 

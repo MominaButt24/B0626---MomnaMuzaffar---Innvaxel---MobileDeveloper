@@ -1,24 +1,28 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
 import { Spacing, Radius } from '../constants/spacing';
 import { CATEGORIES } from '../constants/categories';
+import { Ionicons } from '@expo/vector-icons';
+import SummaryDonut from '../components/SummaryDonut';
+import { calculateCategoryTotals } from '../utils/calcSummary';
+import { formatCurrency } from '../utils/formatCurrency';
 
+/**
+ * SummaryScreen: Provides a visual breakdown of spending by category.
+ * Integrated with calcSummary and formatCurrency utilities for clean code.
+ */
 const SummaryScreen = () => {
-  const { theme } = useTheme();
-  const { expenses = [], totalSpent = 0 } = useExpenses();
+  const { theme, isDarkMode } = useTheme();
+  const { expenses = [], totalExpenses = 0 } = useExpenses();
 
-  // Calculate totals per category
-  const categoryTotals = expenses.reduce((acc, curr) => {
-    acc[curr.category] = (acc[curr.category] || 0) + Number(curr.amount);
-    return acc;
-  }, {});
-
-  // Sort categories by amount spent (highest first)
-  const sortedCategories = Object.entries(categoryTotals)
-    .sort(([, a], [, b]) => b - a);
+  // Use the utility to calculate chart and list data
+  const chartData = useMemo(() => 
+    calculateCategoryTotals(expenses, CATEGORIES), 
+    [expenses]
+  );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.bgSecondary }]} edges={['top']}>
@@ -28,41 +32,53 @@ const SummaryScreen = () => {
       
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* Total Spending Card */}
-        <View style={[styles.totalCard, { backgroundColor: theme.bgBrand }]}>
-          <Text style={[styles.totalLabel, { color: theme.textInverse, opacity: 0.8 }]}>Total Spending</Text>
-          <Text style={[styles.totalAmount, { color: theme.textInverse }]}>
-            ${(totalSpent || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        <View style={[styles.totalCard, { backgroundColor: '#1E293B' }]}>
+          <Text style={[styles.totalLabel, { color: 'rgba(255,255,255,0.7)' }]}>Total Spending</Text>
+          <Text style={[styles.totalAmount, { color: '#FFFFFF' }]}>
+            {formatCurrency(totalExpenses)}
           </Text>
         </View>
+
+        {/* Visual Donut Chart */}
+        {totalExpenses > 0 && (
+          <View style={styles.chartWrapper}>
+             <SummaryDonut data={chartData} total={totalExpenses} />
+          </View>
+        )}
 
         <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>Category Breakdown</Text>
         
         <View style={[styles.breakdownCard, { backgroundColor: theme.cardBg }]}>
-          {sortedCategories.length > 0 ? (
-            sortedCategories.map(([cat, amt]) => {
-              const percentage = totalSpent > 0 ? (amt / totalSpent) : 0;
-              const categoryInfo = CATEGORIES.find(c => c.label === cat);
+          {chartData.length > 0 ? (
+            chartData.map((item) => {
+              const percentage = totalExpenses > 0 ? (item.amount / totalExpenses) : 0;
+              const categoryInfo = CATEGORIES.find(c => c.label === item.category) || CATEGORIES[CATEGORIES.length - 1];
               
               return (
-                <View key={cat} style={styles.categoryItem}>
+                <View key={item.category} style={styles.categoryItem}>
                   <View style={styles.categoryHeader}>
                     <View style={styles.categoryInfo}>
-                      <Text style={styles.categoryEmoji}>{categoryInfo?.emoji || '💰'}</Text>
-                      <Text style={[styles.categoryName, { color: theme.textPrimary }]}>{cat}</Text>
+                      <View style={[
+                        styles.iconCircle, 
+                        { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : categoryInfo.color + '15' }
+                      ]}>
+                        <Ionicons name={categoryInfo.icon} size={18} color={categoryInfo.color} />
+                      </View>
+                      <Text style={[styles.categoryName, { color: theme.textPrimary }]}>{item.category}</Text>
                     </View>
                     <Text style={[styles.categoryValue, { color: theme.textPrimary }]}>
-                      ${amt.toFixed(2)} ({Math.round(percentage * 100)}%)
+                      {formatCurrency(item.amount)} ({Math.round(percentage * 100)}%)
                     </Text>
                   </View>
                   
                   {/* Visual Progress Bar */}
-                  <View style={[styles.progressBase, { backgroundColor: theme.bgSecondary }]}>
+                  <View style={[styles.progressBase, { backgroundColor: isDarkMode ? '#1E222E' : '#F1F5F9' }]}>
                     <View 
                       style={[
                         styles.progressFill, 
                         { 
-                          backgroundColor: theme.bgBrand, 
-                          width: `${percentage * 100}%` 
+                          backgroundColor: categoryInfo.color, 
+                          width: `${Math.max(percentage * 100, 2)}%` 
                         }
                       ]} 
                     />
@@ -72,105 +88,58 @@ const SummaryScreen = () => {
             })
           ) : (
             <View style={styles.emptyState}>
-              <Text style={{ color: theme.textSecondary }}>No data to display yet.</Text>
+              <Ionicons name="stats-chart-outline" size={48} color={theme.textMuted} style={{ marginBottom: 12 }} />
+              <Text style={{ color: theme.textSecondary, textAlign: 'center' }}>
+                No spending data recorded yet.
+              </Text>
             </View>
           )}
         </View>
         
-        <View style={{ height: 40 }} />
+        <View style={{ height: 100 }} />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
-  content: {
-    padding: Spacing.lg,
-  },
+  container: { flex: 1 },
+  header: { paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md },
+  title: { fontSize: 28, fontWeight: 'bold' },
+  content: { padding: Spacing.lg },
   totalCard: {
     padding: Spacing.xxl,
-    borderRadius: Radius.card,
+    borderRadius: 24,
     alignItems: 'center',
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.md,
+    elevation: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
-  totalLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: Spacing.xs,
-  },
-  totalAmount: {
-    fontSize: 36,
-    fontWeight: '800',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: Spacing.md,
-    marginLeft: 4,
-  },
+  totalLabel: { fontSize: 14, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, marginBottom: Spacing.xs },
+  totalAmount: { fontSize: 36, fontWeight: '800' },
+  chartWrapper: { alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.xl },
+  sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: Spacing.md, marginLeft: 4 },
   breakdownCard: {
     padding: Spacing.lg,
-    borderRadius: Radius.lg,
+    borderRadius: 20,
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 5,
-    elevation: 2,
   },
-  categoryItem: {
-    marginBottom: Spacing.lg,
-  },
-  categoryHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.sm,
-  },
-  categoryInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  categoryEmoji: {
-    fontSize: 18,
-    marginRight: Spacing.sm,
-  },
-  categoryName: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  categoryValue: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  progressBase: {
-    height: 8,
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-  emptyState: {
-    alignItems: 'center',
-    padding: Spacing.xl,
-  }
+  categoryItem: { marginBottom: Spacing.lg },
+  categoryHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.sm },
+  categoryInfo: { flexDirection: 'row', alignItems: 'center' },
+  iconCircle: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginRight: Spacing.sm },
+  categoryName: { fontSize: 15, fontWeight: '600' },
+  categoryValue: { fontSize: 14, fontWeight: '500' },
+  progressBase: { height: 10, borderRadius: 5, overflow: 'hidden' },
+  progressFill: { height: '100%', borderRadius: 5 },
+  emptyState: { alignItems: 'center', padding: Spacing.xxxl },
 });
 
 export default SummaryScreen;

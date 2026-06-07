@@ -14,7 +14,7 @@ const AppNavigator = () => {
         component={AddEditScreen} 
         options={{ 
           presentation: 'modal',
-          headerShown: true,
+          headerShown: false,
           headerTitle: 'New Expense'
         }} 
       />

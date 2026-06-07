@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { Shadow } from '../constants/spacing';
 import { useNavigation } from '@react-navigation/native';
@@ -13,7 +13,7 @@ import FAB from '../components/FAB';
 
 const Tab = createBottomTabNavigator();
 
-const Placeholder = () => <View />;
+const Placeholder = () => null;
 
 const TabNavigator = () => {
   const { theme, isDarkMode } = useTheme();
@@ -26,20 +26,26 @@ const TabNavigator = () => {
           headerShown: false,
           tabBarShowLabel: false,
           tabBarStyle: {
-            backgroundColor: '#1E222E', // Solid Dark Navy for the bar
+            backgroundColor: isDarkMode ? '#1E222E' : '#FFFFFF',
             position: 'absolute',
             bottom: 25,
             left: 20,
             right: 20,
-            height: 65,
-            borderRadius: 32,
+            height: 70,
+            borderRadius: 35,
             borderTopWidth: 0,
             paddingBottom: 0,
             ...Shadow.md,
-            elevation: 10,
+            elevation: 5,
           },
-          tabBarActiveTintColor: '#FFFFFF',
-          tabBarInactiveTintColor: 'rgba(255,255,255,0.4)',
+          // Centering items vertically within the tab bar
+          tabBarItemStyle: {
+            height: 70,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          tabBarActiveTintColor: theme.textBrand,
+          tabBarInactiveTintColor: isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)',
         })}
       >
         <Tab.Screen 
@@ -48,8 +54,8 @@ const TabNavigator = () => {
           options={{
             tabBarIcon: ({ color, focused }) => (
               <View style={styles.iconWrapper}>
-                <Ionicons name={focused ? "home" : "home-outline"} size={24} color={color} />
-                {focused && <View style={styles.dot} />}
+                <Ionicons name={focused ? "home" : "home-outline"} size={26} color={color} />
+                {focused && <View style={[styles.dot, { backgroundColor: color }]} />}
               </View>
             ),
           }}
@@ -60,14 +66,26 @@ const TabNavigator = () => {
           options={{
             tabBarIcon: ({ color, focused }) => (
               <View style={styles.iconWrapper}>
-                <Ionicons name={focused ? "list" : "list-outline"} size={24} color={color} />
-                {focused && <View style={styles.dot} />}
+                <Ionicons name={focused ? "list" : "list-outline"} size={26} color={color} />
+                {focused && <View style={[styles.dot, { backgroundColor: color }]} />}
+              </View>
+            ),
+          }}
+        />
+        <Tab.Screen 
+          name="Summary" 
+          component={SummaryScreen} 
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <View style={styles.iconWrapper}>
+                <Ionicons name={focused ? "pie-chart" : "pie-chart-outline"} size={26} color={color} />
+                {focused && <View style={[styles.dot, { backgroundColor: color }]} />}
               </View>
             ),
           }}
         />
         
-        {/* Empty middle tab to leave space for the FAB */}
+        {/* Placeholder slot to create space for the FAB on the extreme right */}
         <Tab.Screen 
           name="AddPlaceholder" 
           component={Placeholder} 
@@ -75,34 +93,9 @@ const TabNavigator = () => {
             tabBarButton: () => <View style={{ flex: 1 }} />,
           }}
         />
-        
-        <Tab.Screen 
-          name="Summary" 
-          component={SummaryScreen} 
-          options={{
-            tabBarIcon: ({ color, focused }) => (
-              <View style={styles.iconWrapper}>
-                <Ionicons name={focused ? "pie-chart" : "pie-chart-outline"} size={24} color={color} />
-                {focused && <View style={styles.dot} />}
-              </View>
-            ),
-          }}
-        />
-        <Tab.Screen 
-          name="Profile" 
-          component={Placeholder}
-          options={{
-            tabBarIcon: ({ color, focused }) => (
-              <View style={styles.iconWrapper}>
-                <Ionicons name={focused ? "person" : "person-outline"} size={24} color={color} />
-                {focused && <View style={styles.dot} />}
-              </View>
-            ),
-          }}
-        />
       </Tab.Navigator>
 
-      {/* Global FAB sitting perfectly in the center hole */}
+      {/* FAB perfectly aligned with the rightmost slot */}
       <FAB onPress={() => navigation.navigate('AddExpense')} />
     </View>
   );
@@ -112,14 +105,14 @@ const styles = StyleSheet.create({
   iconWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 8,
   },
   dot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#FFFFFF',
     marginTop: 4,
+    position: 'absolute',
+    bottom: -12, // Positioned below the icon
   }
 });
 
