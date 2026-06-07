@@ -111,7 +111,7 @@ const AddEditScreen = () => {
             <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary }]}
-                placeholder="$0.00"
+                placeholder="Rs 0.00"
                 placeholderTextColor={theme.textMuted}
                 keyboardType="decimal-pad"
                 value={amount}

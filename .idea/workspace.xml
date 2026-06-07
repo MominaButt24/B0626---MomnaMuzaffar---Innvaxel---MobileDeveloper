@@ -6,20 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="0ccee89a-84dd-40a1-aa42-3920d07c16f4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/babel.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/AppText.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/ExpenseCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/ExpenseCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/FAB.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/FAB.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/SummaryDonut.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/SummaryDonut.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/constants/categories.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/constants/categories.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/navigation/AppNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/navigation/AppNavigator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/navigation/TabNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/navigation/TabNavigator.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/utils/validators.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/utils/validators.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/OnboardingScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/OnboardingScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/utils/formatCurrency.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/utils/formatCurrency.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,22 +34,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/BM/Desktop/MyExpenseApp&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/BM/Desktop/MyExpenseApp/MyExpenseApp/src/assets"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\BM\Desktop\MyExpenseApp\MyExpenseApp\src\assets" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\BM\Desktop\MyExpenseApp\src" />
     </key>

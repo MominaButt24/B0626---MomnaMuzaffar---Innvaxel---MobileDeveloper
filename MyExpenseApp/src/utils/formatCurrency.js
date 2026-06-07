@@ -1,13 +1,16 @@
 /**
  * Formats a number as a currency string.
- * Centralizing this ensures consistent formatting (e.g., $1,234.56) across the app.
+ * Centralizing this ensures consistent formatting across the app.
+ * Adjusted to display "Rs" as requested.
  */
 export const formatCurrency = (value) => {
-  if (value === undefined || value === null) return '$0.00';
+  if (value === undefined || value === null) return 'Rs 0.00';
   
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  // Using a custom string format for "Rs" to ensure cross-platform consistency
+  const formattedValue = Number(value).toLocaleString(undefined, {
     minimumFractionDigits: 2,
-  }).format(value);
+    maximumFractionDigits: 2,
+  });
+
+  return `Rs ${formattedValue}`;
 };
