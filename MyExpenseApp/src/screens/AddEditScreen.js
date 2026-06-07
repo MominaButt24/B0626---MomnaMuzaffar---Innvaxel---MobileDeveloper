@@ -15,12 +15,16 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
 import { Spacing, Radius } from '../constants/spacing';
+import { FontSize, FontWeight } from '../constants/typography';
 import { CATEGORIES } from '../constants/categories';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { validateExpense } from '../utils/validators';
 import { formatNumericDate } from '../utils/formatDate';
 
+/**
+ * AddEditScreen: Standardized with constants for spacing, radius, and typography.
+ */
 const AddEditScreen = () => {
   const { theme, isDarkMode } = useTheme();
   const { addExpense, updateExpense, deleteExpense } = useExpenses();
@@ -34,7 +38,7 @@ const AddEditScreen = () => {
   const [amount, setAmount] = useState(editingExpense?.amount?.toString() || '');
   const [category, setCategory] = useState(editingExpense?.category || CATEGORIES[0].label);
   const [date, setDate] = useState(new Date(editingExpense?.date || Date.now()));
-  const [notes, setNotes] = useState(editingExpense?.notes || ''); // Requirement: Optional notes
+  const [notes, setNotes] = useState(editingExpense?.notes || ''); 
   const [showDatePicker, setShowDatePicker] = useState(false);
   
   const [errors, setErrors] = useState({});
@@ -146,7 +150,7 @@ const AddEditScreen = () => {
           {/* Notes (Optional Requirement) */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Notes (Optional)</Text>
-            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC', height: 80, alignItems: 'flex-start', paddingVertical: 10 }]}>
+            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC', height: 80, alignItems: 'flex-start', paddingVertical: Spacing.sm }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary, height: '100%' }]}
                 placeholder="Add details..."
@@ -177,7 +181,7 @@ const AddEditScreen = () => {
                   </View>
                   <Text style={[
                     styles.categoryItemText, 
-                    { color: isActive ? '#3B82F6' : theme.textSecondary, fontWeight: isActive ? '700' : '500' }
+                    { color: isActive ? '#3B82F6' : theme.textSecondary, fontWeight: isActive ? FontWeight.bold : FontWeight.medium }
                   ]}>
                     {cat.label}
                   </Text>
@@ -214,23 +218,53 @@ const AddEditScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.md, height: 60 },
-  backButton: { padding: 8 },
-  headerTitle: { fontSize: 20, fontWeight: '800' },
+  header: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: Spacing.md, 
+    height: 60 
+  },
+  backButton: { padding: Spacing.sm },
+  headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
   scrollContent: { padding: Spacing.lg, paddingBottom: 60 },
   formGroup: { marginBottom: Spacing.lg },
-  label: { fontSize: 16, fontWeight: '700', marginBottom: 8 },
-  inputContainer: { flexDirection: 'row', alignItems: 'center', height: 56, borderRadius: Radius.lg, paddingHorizontal: Spacing.md },
-  input: { flex: 1, fontSize: 16, fontWeight: '600' },
-  dateText: { flex: 1, fontSize: 16, fontWeight: '600' },
+  label: { fontSize: FontSize.base, fontWeight: FontWeight.bold, marginBottom: Spacing.sm },
+  inputContainer: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    height: 56, 
+    borderRadius: Radius.lg, 
+    paddingHorizontal: Spacing.md 
+  },
+  input: { flex: 1, fontSize: FontSize.base, fontWeight: FontWeight.semibold },
+  dateText: { flex: 1, fontSize: FontSize.base, fontWeight: FontWeight.semibold },
   categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: Spacing.sm },
   categoryItem: { width: '23%', alignItems: 'center', marginBottom: Spacing.lg },
-  categoryIconCircle: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-  categoryItemText: { fontSize: 11, textAlign: 'center' },
-  saveButton: { height: 56, borderRadius: Radius.lg, justifyContent: 'center', alignItems: 'center', marginTop: Spacing.md, elevation: 4, shadowColor: '#3B82F6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8 },
-  saveButtonText: { fontSize: 18, fontWeight: 'bold' },
+  categoryIconCircle: { 
+    width: 56, 
+    height: 56, 
+    borderRadius: 28, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginBottom: Spacing.sm 
+  },
+  categoryItemText: { fontSize: FontSize.xs, textAlign: 'center' },
+  saveButton: { 
+    height: 56, 
+    borderRadius: Radius.lg, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: Spacing.md, 
+    elevation: 4, 
+    shadowColor: '#3B82F6', 
+    shadowOffset: { width: 0, height: 4 }, 
+    shadowOpacity: 0.3, 
+    shadowRadius: 8 
+  },
+  saveButtonText: { fontSize: FontSize.md, fontWeight: FontWeight.bold },
   deleteButton: { marginTop: Spacing.xl, alignItems: 'center', padding: Spacing.md },
-  deleteButtonText: { fontSize: 16, fontWeight: '600' },
+  deleteButtonText: { fontSize: FontSize.base, fontWeight: FontWeight.semibold },
 });
 
 export default AddEditScreen;

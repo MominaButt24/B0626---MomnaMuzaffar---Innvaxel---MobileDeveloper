@@ -6,14 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="0ccee89a-84dd-40a1-aa42-3920d07c16f4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/context/ExpenseContext.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/navigation/AppNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/navigation/AppNavigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/components/StatCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/components/StatCard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/AddEditScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/ExpensesScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/ExpensesScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/HomeScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/OnboardingScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/OnboardingScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/utils/formatCurrency.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/utils/formatCurrency.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/SummaryScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

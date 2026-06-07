@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { Spacing, Radius } from '../constants/spacing';
+import { FontSize, FontWeight } from '../constants/typography';
 import { useExpenses } from '../context/ExpenseContext';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -20,7 +21,7 @@ const { width } = Dimensions.get('window');
 
 /**
  * OnboardingScreen: The first screen a new user sees.
- * Branded as "SpendWise" to match the splash screen.
+ * Branded as "SpendWise" and standardized with constants.
  */
 const OnboardingScreen = () => {
   const { theme, isDarkMode } = useTheme();
@@ -39,7 +40,7 @@ const OnboardingScreen = () => {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.bgPrimary }]}>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+        style={styles.flex}
       >
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           {/* Visual Illustration Area */}
@@ -64,7 +65,7 @@ const OnboardingScreen = () => {
           {/* Name Input Field */}
           <View style={styles.inputWrapper}>
             <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
-              <Ionicons name="person-outline" size={20} color={theme.textMuted} style={{ marginRight: 12 }} />
+              <Ionicons name="person-outline" size={20} color={theme.textMuted} style={{ marginRight: Spacing.md }} />
               <TextInput
                 style={[styles.input, { color: theme.textPrimary }]}
                 placeholder="Enter your name"
@@ -84,7 +85,7 @@ const OnboardingScreen = () => {
               activeOpacity={0.8}
             >
               <Text style={styles.buttonText}>Get Started</Text>
-              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" style={{ marginLeft: 8 }} />
+              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" style={{ marginLeft: Spacing.sm }} />
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -95,19 +96,20 @@ const OnboardingScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  flex: { flex: 1 },
   scrollContent: { flexGrow: 1, padding: Spacing.xl, alignItems: 'center', justifyContent: 'center' },
   imageContainer: { marginBottom: Spacing.xl, justifyContent: 'center', alignItems: 'center' },
   circle: { justifyContent: 'center', alignItems: 'center' },
   innerCircle: { justifyContent: 'center', alignItems: 'center', elevation: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.1, shadowRadius: 20 },
   textSection: { alignItems: 'center', marginBottom: Spacing.xl },
-  title: { fontSize: 28, fontWeight: '800', textAlign: 'center', marginBottom: Spacing.sm, lineHeight: 36 },
-  subtitle: { fontSize: 18, fontWeight: '600', textAlign: 'center' },
+  title: { fontSize: FontSize.xxl, fontWeight: FontWeight.bold, textAlign: 'center', marginBottom: Spacing.sm, lineHeight: 36 },
+  subtitle: { fontSize: FontSize.md, fontWeight: FontWeight.semibold, textAlign: 'center' },
   inputWrapper: { width: '100%', marginBottom: Spacing.xxl },
   inputContainer: { flexDirection: 'row', alignItems: 'center', height: 60, borderRadius: Radius.lg, paddingHorizontal: Spacing.lg, borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)' },
-  input: { flex: 1, fontSize: 18, fontWeight: '600' },
+  input: { flex: 1, fontSize: FontSize.md, fontWeight: FontWeight.semibold },
   footer: { width: '100%', marginTop: 'auto' },
   button: { height: 60, borderRadius: Radius.lg, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5, shadowColor: '#3B82F6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10 },
-  buttonText: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
+  buttonText: { color: '#FFFFFF', fontSize: FontSize.base, fontWeight: FontWeight.bold },
 });
 
 export default OnboardingScreen;

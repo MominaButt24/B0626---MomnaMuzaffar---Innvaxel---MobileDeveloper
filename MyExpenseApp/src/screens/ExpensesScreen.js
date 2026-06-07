@@ -4,24 +4,29 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
 import { Spacing, Radius } from '../constants/spacing';
+import { FontSize, FontWeight } from '../constants/typography';
 import { CATEGORIES } from '../constants/categories';
 import ExpenseCard from '../components/ExpenseCard';
 import { useNavigation } from '@react-navigation/native';
 import { groupExpensesByDate } from '../utils/groupByDate';
 
+/**
+ * ExpensesScreen: Transaction history grouped by date.
+ * Fully integrated with Spacing, Radius, and Typography constants.
+ */
 const ExpensesScreen = () => {
   const { theme, isDarkMode } = useTheme();
   const { expenses } = useExpenses();
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  // 1. Filter expenses based on category selection
+  // Filter expenses based on category selection
   const filteredExpenses = useMemo(() => {
     if (selectedCategory === 'All') return expenses;
     return expenses.filter(e => e.category === selectedCategory);
   }, [expenses, selectedCategory]);
 
-  // 2. Use our Utility to group the filtered expenses by date
+  // Use our Utility to group the filtered expenses by date
   const sections = useMemo(() => groupExpensesByDate(filteredExpenses), [filteredExpenses]);
 
   const categoriesWithAll = ['All', ...CATEGORIES.map(c => c.label)];
@@ -62,11 +67,10 @@ const ExpensesScreen = () => {
         </ScrollView>
       </View>
       
-      {/* SectionList: Replaces FlatList for a grouped look */}
       <SectionList
         sections={sections}
         keyExtractor={(item) => item.id}
-        stickySectionHeadersEnabled={false} // Matches the "Sky/Dream" clean look
+        stickySectionHeadersEnabled={false}
         renderItem={({ item }) => (
           <ExpenseCard 
             expense={item} 
@@ -103,8 +107,8 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.sm,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: FontSize.xxl,
+    fontWeight: FontWeight.bold,
   },
   filterContainer: {
     paddingHorizontal: Spacing.lg,
@@ -118,12 +122,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   filterText: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.semibold,
   },
   sectionHeader: {
-    fontSize: 14,
-    fontWeight: '700',
+    fontSize: FontSize.xs,
+    fontWeight: FontWeight.bold,
     textTransform: 'uppercase',
     letterSpacing: 1,
     paddingHorizontal: Spacing.xl,
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   listContent: {
-    paddingBottom: 120, // Extra space for the floating bottom bar
+    paddingBottom: 120, 
   },
   emptyContainer: {
     marginTop: 100,
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xl,
   },
   emptyText: {
-    fontSize: 16,
+    fontSize: FontSize.base,
   },
 });
 

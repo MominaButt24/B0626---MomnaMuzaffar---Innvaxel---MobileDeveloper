@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
 import { Spacing, Radius } from '../constants/spacing';
+import { FontSize, FontWeight } from '../constants/typography';
 import { CATEGORIES } from '../constants/categories';
 import { Ionicons } from '@expo/vector-icons';
 import SummaryDonut from '../components/SummaryDonut';
@@ -12,13 +13,12 @@ import { formatCurrency } from '../utils/formatCurrency';
 
 /**
  * SummaryScreen: Provides a visual breakdown of spending by category.
- * Integrated with calcSummary and formatCurrency utilities for clean code.
+ * Fully integrated with Spacing, Radius, and Typography constants.
  */
 const SummaryScreen = () => {
   const { theme, isDarkMode } = useTheme();
   const { expenses = [], totalExpenses = 0 } = useExpenses();
 
-  // Use the utility to calculate chart and list data
   const chartData = useMemo(() => 
     calculateCategoryTotals(expenses, CATEGORIES), 
     [expenses]
@@ -88,7 +88,7 @@ const SummaryScreen = () => {
             })
           ) : (
             <View style={styles.emptyState}>
-              <Ionicons name="stats-chart-outline" size={48} color={theme.textMuted} style={{ marginBottom: 12 }} />
+              <Ionicons name="stats-chart-outline" size={48} color={theme.textMuted} style={{ marginBottom: Spacing.md }} />
               <Text style={{ color: theme.textSecondary, textAlign: 'center' }}>
                 No spending data recorded yet.
               </Text>
@@ -105,11 +105,11 @@ const SummaryScreen = () => {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   header: { paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md },
-  title: { fontSize: 28, fontWeight: 'bold' },
+  title: { fontSize: FontSize.xxl, fontWeight: FontWeight.bold },
   content: { padding: Spacing.lg },
   totalCard: {
     padding: Spacing.xxl,
-    borderRadius: 24,
+    borderRadius: Radius.xxl,
     alignItems: 'center',
     marginBottom: Spacing.md,
     elevation: 8,
@@ -118,13 +118,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 6,
   },
-  totalLabel: { fontSize: 14, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, marginBottom: Spacing.xs },
-  totalAmount: { fontSize: 36, fontWeight: '800' },
+  totalLabel: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: Spacing.xs },
+  totalAmount: { fontSize: FontSize.hero, fontWeight: FontWeight.bold },
   chartWrapper: { alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.xl },
-  sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: Spacing.md, marginLeft: 4 },
+  sectionTitle: { fontSize: FontSize.md, fontWeight: FontWeight.bold, marginBottom: Spacing.md, marginLeft: Spacing.xs },
   breakdownCard: {
     padding: Spacing.lg,
-    borderRadius: 20,
+    borderRadius: Radius.xl,
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
   categoryHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.sm },
   categoryInfo: { flexDirection: 'row', alignItems: 'center' },
   iconCircle: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginRight: Spacing.sm },
-  categoryName: { fontSize: 15, fontWeight: '600' },
-  categoryValue: { fontSize: 14, fontWeight: '500' },
+  categoryName: { fontSize: FontSize.base, fontWeight: FontWeight.semibold },
+  categoryValue: { fontSize: FontSize.sm, fontWeight: FontWeight.medium },
   progressBase: { height: 10, borderRadius: 5, overflow: 'hidden' },
   progressFill: { height: '100%', borderRadius: 5 },
   emptyState: { alignItems: 'center', padding: Spacing.xxxl },

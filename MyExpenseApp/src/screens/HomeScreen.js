@@ -4,16 +4,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
 import { Spacing, Radius } from '../constants/spacing';
+import { FontSize, FontWeight } from '../constants/typography';
 import StatCard from '../components/StatCard';
 import ExpenseCard from '../components/ExpenseCard';
 import FAB from '../components/FAB';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * HomeScreen: The main dashboard.
- * Displays total balance, recent transactions, and personalized greeting.
+ * Standardized using Spacing, Radius, and Typography constants.
  */
 const HomeScreen = () => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
@@ -24,14 +26,13 @@ const HomeScreen = () => {
     totalExpenses = 0, 
     setIncome,
     userName,
-    resetOnboarding // Use the reset function from Context
+    resetOnboarding 
   } = useExpenses();
   const navigation = useNavigation();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [newBudget, setNewBudget] = useState(totalIncome.toString());
 
-  // Show only 5 most recent
   const recentExpenses = expenses.slice(0, 4);
 
   const handleUpdateBudget = () => {
@@ -71,22 +72,21 @@ const HomeScreen = () => {
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
             <View>
-              <Text style={[styles.greeting, { color: '#FFFFFF', opacity: 0.8 }]}>Hello,</Text>
-              <Text style={[styles.userName, { color: '#FFFFFF' }]} numberOfLines={1}>
+              <Text style={[styles.greeting, { color: theme.textInverse, opacity: 0.8 }]}>Hello,</Text>
+              <Text style={[styles.userName, { color: theme.textInverse }]} numberOfLines={1}>
                 {userName || 'Guest'}
               </Text>
             </View>
             
             <View style={styles.headerActions}>
-              {/* Wallet/Settings Icon */}
               <TouchableOpacity 
                 onPress={() => {
                   setNewBudget(totalIncome.toString());
                   setModalVisible(true);
                 }}
-                style={[styles.iconButton, { backgroundColor: 'rgba(255,255,255,0.2)', marginRight: 10 }]}
+                style={[styles.iconButton, { backgroundColor: 'rgba(255,255,255,0.2)', marginRight: Spacing.sm }]}
               >
-                <Ionicons name="wallet-outline" size={20} color="white" />
+                <Ionicons name="wallet-outline" size={FontSize.lg} color={theme.textInverse} />
               </TouchableOpacity>
 
               <TouchableOpacity 
@@ -95,8 +95,8 @@ const HomeScreen = () => {
               >
                 <Ionicons 
                   name={isDarkMode ? 'sunny' : 'moon'} 
-                  size={20} 
-                  color="white" 
+                  size={FontSize.lg} 
+                  color={theme.textInverse} 
                 />
               </TouchableOpacity>
             </View>
@@ -141,7 +141,7 @@ const HomeScreen = () => {
           ))
         ) : (
           <View style={styles.emptyContainer}>
-            <Ionicons name="receipt-outline" size={40} color={theme.textMuted} style={{ marginBottom: 10 }} />
+            <Ionicons name="receipt-outline" size={48} color={theme.textMuted} style={{ marginBottom: Spacing.sm }} />
             <Text style={[styles.emptyText, { color: theme.textSecondary }]}>
               No expenses yet. Tap + to add one!
             </Text>
@@ -159,14 +159,14 @@ const HomeScreen = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#1E293B' : '#FFFFFF' }]}>
+          <View style={[styles.modalContent, { backgroundColor: theme.cardBg }]}>
             <Text style={[styles.modalTitle, { color: theme.textPrimary }]}>Settings</Text>
             
             <View style={styles.inputWrapper}>
                <Text style={[styles.inputLabel, { color: theme.textSecondary }]}>Update Monthly Budget</Text>
                <TextInput
                 style={[styles.budgetInput, { 
-                  backgroundColor: isDarkMode ? '#0F172A' : '#F8FAFC', 
+                  backgroundColor: theme.bgSecondary, 
                   color: theme.textPrimary,
                   borderColor: theme.border
                 }]}
@@ -187,9 +187,8 @@ const HomeScreen = () => {
 
             <View style={styles.divider} />
 
-            {/* Reset App Option to see onboarding again */}
             <TouchableOpacity style={styles.resetButton} onPress={handleResetApp}>
-              <Ionicons name="refresh-circle-outline" size={22} color={theme.danger} />
+              <Ionicons name="refresh-circle-outline" size={FontSize.lg} color={theme.danger} />
               <Text style={[styles.resetButtonText, { color: theme.danger }]}>Reset Profile (Onboarding)</Text>
             </TouchableOpacity>
 
@@ -197,7 +196,7 @@ const HomeScreen = () => {
               onPress={() => setModalVisible(false)}
               style={styles.closeButton}
             >
-              <Text style={{ color: theme.textSecondary, fontWeight: '600' }}>Close</Text>
+              <Text style={{ color: theme.textSecondary, fontWeight: FontWeight.semibold }}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -210,32 +209,87 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  headerBg: { height: 180, borderBottomLeftRadius: Radius.xxl, borderBottomRightRadius: Radius.xxl, paddingHorizontal: Spacing.lg },
-  headerContent: { marginTop: Spacing.md, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerBg: { 
+    height: 180, 
+    borderBottomLeftRadius: Radius.xxl, 
+    borderBottomRightRadius: Radius.xxl, 
+    paddingHorizontal: Spacing.lg 
+  },
+  headerContent: { 
+    marginTop: Spacing.md, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center' 
+  },
   headerActions: { flexDirection: 'row' },
-  greeting: { fontSize: 20, fontWeight: '500' },
-  userName: { fontSize: 24, fontWeight: '800' },
-  iconButton: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
+  greeting: { fontSize: FontSize.lg, fontWeight: FontWeight.medium },
+  userName: { fontSize: FontSize.xl, fontWeight: FontWeight.bold },
+  iconButton: { width: 40, height: 40, borderRadius: Radius.full, justifyContent: 'center', alignItems: 'center' },
   scrollView: { flex: 1, marginTop: -60 },
   scrollContent: { paddingBottom: Spacing.xl },
   statWrapper: { marginBottom: Spacing.lg },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.lg, marginBottom: Spacing.md, marginTop: Spacing.sm },
-  sectionTitle: { fontSize: 18, fontWeight: '700' },
-  seeAll: { fontSize: 14, fontWeight: '600' },
+  sectionHeader: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    paddingHorizontal: Spacing.lg, 
+    marginBottom: Spacing.md, 
+    marginTop: Spacing.sm 
+  },
+  sectionTitle: { fontSize: FontSize.md, fontWeight: FontWeight.bold },
+  seeAll: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
   emptyContainer: { padding: Spacing.xxxl, alignItems: 'center' },
-  emptyText: { fontSize: 14, textAlign: 'center' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: Spacing.xl },
-  modalContent: { width: '100%', borderRadius: Radius.lg, padding: Spacing.xl, alignItems: 'center' },
-  modalTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: Spacing.lg },
+  emptyText: { fontSize: FontSize.sm, textAlign: 'center' },
+  modalOverlay: { 
+    flex: 1, 
+    backgroundColor: 'rgba(0,0,0,0.6)', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    padding: Spacing.xl 
+  },
+  modalContent: { 
+    width: '100%', 
+    borderRadius: Radius.lg, 
+    padding: Spacing.xl, 
+    alignItems: 'center', 
+    elevation: 10 
+  },
+  modalTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, marginBottom: Spacing.lg },
   inputWrapper: { width: '100%', marginBottom: Spacing.md },
-  inputLabel: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', marginBottom: 8, letterSpacing: 0.5 },
-  budgetInput: { width: '100%', height: 54, borderRadius: Radius.md, borderWidth: 1, paddingHorizontal: Spacing.md, fontSize: 18, fontWeight: '700' },
-  updateButton: { width: '100%', height: 50, borderRadius: Radius.md, justifyContent: 'center', alignItems: 'center', marginTop: Spacing.sm },
-  updateButtonText: { color: '#FFF', fontWeight: 'bold', fontSize: 16 },
-  divider: { height: 1, backgroundColor: 'rgba(150,150,150,0.1)', width: '100%', marginVertical: Spacing.lg },
-  resetButton: { flexDirection: 'row', alignItems: 'center', padding: 10 },
-  resetButtonText: { fontWeight: '700', marginLeft: 8 },
-  closeButton: { marginTop: Spacing.md, padding: 10 },
+  inputLabel: { 
+    fontSize: FontSize.xs, 
+    fontWeight: FontWeight.bold, 
+    textTransform: 'uppercase', 
+    marginBottom: Spacing.sm, 
+    letterSpacing: 0.5 
+  },
+  budgetInput: { 
+    width: '100%', 
+    height: 54, 
+    borderRadius: Radius.md, 
+    borderWidth: 1, 
+    paddingHorizontal: Spacing.md, 
+    fontSize: FontSize.md, 
+    fontWeight: FontWeight.bold 
+  },
+  updateButton: { 
+    width: '100%', 
+    height: 50, 
+    borderRadius: Radius.md, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: Spacing.sm 
+  },
+  updateButtonText: { color: '#FFF', fontWeight: FontWeight.bold, fontSize: FontSize.base },
+  divider: { 
+    height: 1, 
+    backgroundColor: 'rgba(150,150,150,0.1)', 
+    width: '100%', 
+    marginVertical: Spacing.lg 
+  },
+  resetButton: { flexDirection: 'row', alignItems: 'center', padding: Spacing.sm },
+  resetButtonText: { fontWeight: FontWeight.bold, marginLeft: Spacing.sm },
+  closeButton: { marginTop: Spacing.md, padding: Spacing.sm },
 });
 
 export default HomeScreen;
