@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ccee89a-84dd-40a1-aa42-3920d07c16f4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyExpenseApp/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyExpenseApp/src/screens/SplashScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/MyExpenseApp/src/screens/SplashScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
