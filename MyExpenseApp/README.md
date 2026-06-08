@@ -8,7 +8,7 @@ SpendWise is a modern, lightweight expense tracking application built with **Rea
   <img src="./assets/onBoarding.jpg" width="300" alt="on boarding Screen" />
   <img src="./assets/setIncome.jpg" width="300" alt="set income/budget Screen" />
   <img src="./assets/addExpense.jpg" width="300" alt="add expense Screen" />
-  <img src="./assets/expenseAdded.jpg" width="300" alt="expense added Screen" /> Expense" />
+  <img src="./assets/expenseAdded.jpg" width="300" alt="expense added Screen" />
   <img src="./assets/home.jpg" width="300" alt="home Screen" />
   <img src="./assets/expenseHistory.jpg" width="300" alt="expense history Screen" />
   <img src="./assets/expenseStatsSummary.jpg" width="300" alt="expense stats summary Screen" />
