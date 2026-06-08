@@ -7,7 +7,8 @@ import {
   TouchableOpacity, 
   ScrollView, 
   KeyboardAvoidingView, 
-  Platform 
+  Platform,
+  Image
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -130,6 +131,11 @@ const AddEditScreen = () => {
         <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>
           {isEditing ? 'Edit Expense' : 'Add Expense'}
         </Text>
+        <Image
+            source={require('../assets/wallet.png')}
+            style={styles.ExpenseIcon}
+            resizeMode="contain"
+        />
         <View style={{ width: 40 }} /> 
       </View>
 
@@ -277,6 +283,7 @@ const styles = StyleSheet.create({
   },
   backButton: { padding: Spacing.sm },
   headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
+  ExpenseIcon: { width: 40, height: 40},
   scrollContent: { padding: Spacing.lg, paddingBottom: 60 },
   formGroup: { marginBottom: Spacing.lg },
   label: { fontSize: FontSize.base, fontWeight: FontWeight.bold, marginBottom: Spacing.sm },

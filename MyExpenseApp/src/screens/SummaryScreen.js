@@ -32,10 +32,17 @@ const SummaryScreen = () => {
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
-            <Text style={[styles.headerTitle, { color: theme.textInverse }]}>Statistics</Text>
-            <Text style={[styles.headerSub, { color: theme.textInverse, opacity: 0.8 }]}>
-              Spending Overview
-            </Text>
+            <View>
+                <Text style={[styles.headerTitle, { color: theme.textInverse }]}>Statistics</Text>
+                <Text style={[styles.headerSub, { color: theme.textInverse, opacity: 0.8 }]}>
+                  Spending Overview
+                </Text>
+            </View>
+            <Image
+                source={require('../assets/pie-chart.png')}
+                style={styles.moneyIcon}
+                resizeMode="contain"
+            />
           </View>
         </SafeAreaView>
       </View>
@@ -137,6 +144,9 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: Radius.xxl,
   },
   headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.md,
   },

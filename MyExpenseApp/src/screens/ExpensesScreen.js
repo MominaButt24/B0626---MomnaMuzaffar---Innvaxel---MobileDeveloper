@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, ScrollView, StatusBar, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
@@ -58,10 +58,17 @@ const ExpensesScreen = () => {
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
-            <Text style={[styles.headerTitle, { color: '#FFFFFF' }]}>History</Text>
-            <Text style={[styles.headerSub, { color: '#FFFFFF', opacity: 0.8 }]}>
-              {filteredExpenses.length} Transactions Found
-            </Text>
+             <View>
+                <Text style={[styles.headerTitle, { color: '#FFFFFF' }]}>History</Text>
+                <Text style={[styles.headerSub, { color: '#FFFFFF', opacity: 0.8 }]}>
+                  {filteredExpenses.length} Transactions Found
+                </Text>
+             </View>
+             <Image
+                 source={require('../assets/budget.png')}
+                 style={styles.searchImageIcon}
+                 resizeMode="contain"
+             />
           </View>
         </SafeAreaView>
       </View>
@@ -144,11 +151,15 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: Radius.xxl,
   },
   headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.md,
   },
   headerTitle: { fontSize: FontSize.xxl, fontWeight: FontWeight.bold },
   headerSub: { fontSize: FontSize.sm, fontWeight: FontWeight.medium, marginTop: 2 },
+  searchImageIcon: {width: 60, height: 60},
   searchWrapper: {
     marginTop: -30, 
   },
