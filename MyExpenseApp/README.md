@@ -1,6 +1,9 @@
 # SpendWise 
 
 SpendWise is a modern, lightweight expense tracking application built with **React Native** and **Expo**. It focuses on providing a clean user interface and meaningful visual insights to help users manage their personal finances effectively.
+# SpendWise
+
+![Test Image](./assets/splash.png)
 
 ## Key Features
 
