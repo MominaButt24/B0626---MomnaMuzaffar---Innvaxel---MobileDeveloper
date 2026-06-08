@@ -136,7 +136,6 @@ const AddEditScreen = () => {
             style={styles.ExpenseIcon}
             resizeMode="contain"
         />
-        <View style={{ width: 40 }} /> 
       </View>
 
       <KeyboardAvoidingView 
@@ -279,7 +278,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'space-between', 
     paddingHorizontal: Spacing.md, 
-    height: 60 
+    height: 60,
+    paddingTop: Spacing.md,
   },
   backButton: { padding: Spacing.sm },
   headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
