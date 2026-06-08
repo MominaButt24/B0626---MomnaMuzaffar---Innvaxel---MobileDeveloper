@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useExpenses } from '../context/ExpenseContext';
@@ -13,10 +13,12 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
 import { triggerHaptic } from '../utils/haptics';
+import { exportExpensesToCSV } from '../utils/csvExporter';
 
 /**
  * HomeScreen: The main dashboard.
  * Standardized using constants and enhanced with haptic feedback.
+ * Features: Budget Management, Theme Toggle, CSV Export, and App Reset.
  */
 const HomeScreen = () => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
@@ -34,6 +36,7 @@ const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newBudget, setNewBudget] = useState(totalIncome.toString());
   
+  // Custom Alert State
   const [alertConfig, setAlertConfig] = useState({
     visible: false,
     title: '',
@@ -61,7 +64,13 @@ const HomeScreen = () => {
     }
     setIncome(amount);
     setModalVisible(false);
+    triggerHaptic('success');
     showAlert('Success', 'Your monthly budget has been updated.', 'success');
+  };
+
+  const handleExportCSV = async () => {
+    triggerHaptic('medium');
+    await exportExpensesToCSV(expenses);
   };
 
   const handleResetApp = () => {
@@ -86,6 +95,7 @@ const HomeScreen = () => {
     <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
       <StatusBar barStyle="light-content" />
       
+      {/* Header Background */}
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
@@ -105,7 +115,7 @@ const HomeScreen = () => {
                 }}
                 style={[styles.iconButton, { backgroundColor: 'rgba(255,255,255,0.2)', marginRight: Spacing.sm }]}
               >
-                <Ionicons name="wallet-outline" size={FontSize.lg} color={theme.textInverse} />
+                <Ionicons name="settings-outline" size={FontSize.lg} color={theme.textInverse} />
               </TouchableOpacity>
 
               <TouchableOpacity 
@@ -210,9 +220,21 @@ const HomeScreen = () => {
 
             <View style={styles.divider} />
 
-            <TouchableOpacity style={styles.resetButton} onPress={handleResetApp}>
-              <Ionicons name="refresh-circle-outline" size={FontSize.lg} color={theme.danger} />
-              <Text style={[styles.resetButtonText, { color: theme.danger }]}>Reset Profile (Onboarding)</Text>
+            {/* Export CSV Option */}
+            <TouchableOpacity style={styles.menuOption} onPress={handleExportCSV}>
+              <View style={[styles.optionIcon, { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : '#F0F9FF' }]}>
+                <Ionicons name="download-outline" size={20} color={theme.textBrand} />
+              </View>
+              <Text style={[styles.optionText, { color: theme.textPrimary }]}>Export Data to CSV</Text>
+            </TouchableOpacity>
+
+            <View style={styles.divider} />
+
+            <TouchableOpacity style={styles.menuOption} onPress={handleResetApp}>
+              <View style={[styles.optionIcon, { backgroundColor: theme.danger + '10' }]}>
+                <Ionicons name="refresh-circle-outline" size={20} color={theme.danger} />
+              </View>
+              <Text style={[styles.optionText, { color: theme.danger }]}>Reset Profile (Onboarding)</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
@@ -256,9 +278,10 @@ const styles = StyleSheet.create({
   budgetInput: { width: '100%', height: 54, borderRadius: Radius.md, borderWidth: 1, paddingHorizontal: Spacing.md, fontSize: FontSize.md, fontWeight: FontWeight.bold },
   updateButton: { width: '100%', height: 50, borderRadius: Radius.md, justifyContent: 'center', alignItems: 'center', marginTop: Spacing.sm },
   updateButtonText: { color: '#FFF', fontWeight: FontWeight.bold, fontSize: FontSize.base },
-  divider: { height: 1, backgroundColor: 'rgba(150,150,150,0.1)', width: '100%', marginVertical: Spacing.lg },
-  resetButton: { flexDirection: 'row', alignItems: 'center', padding: Spacing.sm },
-  resetButtonText: { fontWeight: FontWeight.bold, marginLeft: Spacing.sm },
+  divider: { height: 1, backgroundColor: 'rgba(150,150,150,0.1)', width: '100%', marginVertical: Spacing.md },
+  menuOption: { flexDirection: 'row', alignItems: 'center', width: '100%', paddingVertical: 10 },
+  optionIcon: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  optionText: { fontSize: FontSize.base, fontWeight: FontWeight.semibold },
   closeButton: { marginTop: Spacing.md, padding: Spacing.sm },
 });
 
