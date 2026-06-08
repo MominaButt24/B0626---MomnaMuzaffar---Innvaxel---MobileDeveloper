@@ -7,44 +7,75 @@ import { Spacing, Radius } from '../constants/spacing';
 import { FontSize, FontWeight } from '../constants/typography';
 import { CATEGORIES } from '../constants/categories';
 import ExpenseCard from '../components/ExpenseCard';
+import SearchBar from '../components/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import { groupExpensesByDate } from '../utils/groupByDate';
+import { Ionicons } from '@expo/vector-icons'; // Ensure this is imported
 
 /**
- * ExpensesScreen: Transaction history grouped by date.
- * Enhanced with a branded header and consistent overlap styling.
+ * ExpensesScreen: Transaction history with Search and Category filtering.
+ * Enhanced with a branded header and a functional Search Bar.
  */
 const ExpensesScreen = () => {
   const { theme, isDarkMode } = useTheme();
   const { expenses } = useExpenses();
   const navigation = useNavigation();
+  
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
+  // 1. Unified Filtering Logic (Category + Search)
   const filteredExpenses = useMemo(() => {
-    if (selectedCategory === 'All') return expenses;
-    return expenses.filter(e => e.category === selectedCategory);
-  }, [expenses, selectedCategory]);
+    let result = expenses;
+    
+    // Filter by Category
+    if (selectedCategory !== 'All') {
+      result = result.filter(e => e.category === selectedCategory);
+    }
+    
+    // Filter by Search Query
+    if (searchQuery.trim().length > 0) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(e => 
+        e.title.toLowerCase().includes(query) || 
+        (e.notes && e.notes.toLowerCase().includes(query))
+      );
+    }
+    
+    return result;
+  }, [expenses, selectedCategory, searchQuery]);
 
+  // 2. Group the final filtered list by date
   const sections = useMemo(() => groupExpensesByDate(filteredExpenses), [filteredExpenses]);
+
   const categoriesWithAll = ['All', ...CATEGORIES.map(c => c.label)];
 
   return (
     <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
       <StatusBar barStyle="light-content" />
       
-      {/* Enhanced Branded Header */}
+      {/* Branded Header */}
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
             <Text style={[styles.headerTitle, { color: '#FFFFFF' }]}>History</Text>
             <Text style={[styles.headerSub, { color: '#FFFFFF', opacity: 0.8 }]}>
-              {expenses.length} Total Transactions
+              {filteredExpenses.length} Transactions Found
             </Text>
           </View>
         </SafeAreaView>
       </View>
 
-      {/* Category Filter Bar with Overlap */}
+      {/* Search Bar */}
+      <View style={styles.searchWrapper}>
+        <SearchBar 
+          value={searchQuery} 
+          onChangeText={setSearchQuery} 
+          placeholder="Search transactions..."
+        />
+      </View>
+
+      {/* Category Filter Bar */}
       <View style={styles.filterWrapper}>
         <ScrollView 
           horizontal 
@@ -92,10 +123,11 @@ const ExpensesScreen = () => {
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
+            <Ionicons name="search-outline" size={48} color={theme.textMuted} style={{ marginBottom: 12 }} />
             <Text style={[styles.emptyText, { color: theme.textSecondary }]}>
-              {selectedCategory === 'All' 
-                ? "No expenses recorded yet." 
-                : `No expenses in ${selectedCategory}.`}
+              {searchQuery.length > 0 
+                ? `No results for "${searchQuery}"` 
+                : "No expenses recorded yet."}
             </Text>
           </View>
         }
@@ -107,7 +139,7 @@ const ExpensesScreen = () => {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   headerBg: {
-    paddingBottom: 60,
+    paddingBottom: 50,
     borderBottomLeftRadius: Radius.xxl,
     borderBottomRightRadius: Radius.xxl,
   },
@@ -117,7 +149,12 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: FontSize.xxl, fontWeight: FontWeight.bold },
   headerSub: { fontSize: FontSize.sm, fontWeight: FontWeight.medium, marginTop: 2 },
-  filterWrapper: { marginTop: -30 },
+  searchWrapper: {
+    marginTop: -30, 
+  },
+  filterWrapper: {
+    marginTop: Spacing.xs,
+  },
   filterContainer: { paddingHorizontal: Spacing.lg, paddingBottom: Spacing.md },
   filterChip: {
     paddingHorizontal: Spacing.lg,
@@ -138,11 +175,11 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
     paddingHorizontal: Spacing.xl,
-    marginTop: Spacing.lg,
+    marginTop: Spacing.md,
     marginBottom: Spacing.sm,
   },
   listContent: { paddingBottom: 120 },
-  emptyContainer: { marginTop: 100, alignItems: 'center', padding: Spacing.xl },
+  emptyContainer: { marginTop: 80, alignItems: 'center', padding: Spacing.xl },
   emptyText: { fontSize: FontSize.base, textAlign: 'center' },
 });
 

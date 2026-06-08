@@ -4,11 +4,13 @@ import { useTheme } from '../context/ThemeContext';
 import { Spacing, Radius, Shadow } from '../constants/spacing';
 import { FontSize, FontWeight } from '../constants/typography';
 import { Ionicons } from '@expo/vector-icons';
+import { triggerHaptic } from '../utils/haptics';
 
 const { width } = Dimensions.get('window');
 
 /**
- * CustomAlert: A beautiful, themed replacement for standard Alert.alert
+ * CustomAlert: A beautiful, themed replacement for standard Alert.alert.
+ * Automatically triggers haptic feedback based on the alert type.
  */
 const CustomAlert = ({ 
   visible, 
@@ -21,12 +23,13 @@ const CustomAlert = ({
   type = "info" // 'info', 'success', 'error', 'warning'
 }) => {
   const { theme, isDarkMode } = useTheme();
-
-  // Animation for scale-in effect
   const [scaleValue] = React.useState(new Animated.Value(0));
 
   React.useEffect(() => {
     if (visible) {
+      // Trigger haptic feedback when the alert appears
+      triggerHaptic(type);
+
       Animated.spring(scaleValue, {
         toValue: 1,
         friction: 8,
@@ -35,7 +38,7 @@ const CustomAlert = ({
     } else {
       scaleValue.setValue(0);
     }
-  }, [visible]);
+  }, [visible, type]);
 
   if (!visible) return null;
 
@@ -68,14 +71,21 @@ const CustomAlert = ({
             {onConfirm && (
               <TouchableOpacity 
                 style={[styles.button, styles.cancelButton, { borderRightColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]} 
-                onPress={onClose}
+                onPress={() => {
+                  triggerHaptic('light');
+                  onClose();
+                }}
               >
                 <Text style={[styles.buttonText, { color: theme.textSecondary }]}>{cancelText}</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity 
               style={styles.button} 
-              onPress={onConfirm || onClose}
+              onPress={() => {
+                triggerHaptic('medium');
+                if (onConfirm) onConfirm();
+                else onClose();
+              }}
             >
               <Text style={[styles.buttonText, { color: theme.textBrand, fontWeight: FontWeight.bold }]}>
                 {confirmText}

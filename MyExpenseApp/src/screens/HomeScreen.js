@@ -12,11 +12,11 @@ import CustomAlert from '../components/CustomAlert';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
+import { triggerHaptic } from '../utils/haptics';
 
 /**
  * HomeScreen: The main dashboard.
- * Standardized using Spacing, Radius, and Typography constants.
- * Integrated with CustomAlert for a consistent and beautiful UI.
+ * Standardized using constants and enhanced with haptic feedback.
  */
 const HomeScreen = () => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
@@ -34,7 +34,6 @@ const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newBudget, setNewBudget] = useState(totalIncome.toString());
   
-  // Custom Alert State
   const [alertConfig, setAlertConfig] = useState({
     visible: false,
     title: '',
@@ -78,11 +77,15 @@ const HomeScreen = () => {
     );
   };
 
+  const onToggleTheme = () => {
+    triggerHaptic('light');
+    toggleTheme();
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
       <StatusBar barStyle="light-content" />
       
-      {/* Header Background */}
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
@@ -96,6 +99,7 @@ const HomeScreen = () => {
             <View style={styles.headerActions}>
               <TouchableOpacity 
                 onPress={() => {
+                  triggerHaptic('medium');
                   setNewBudget(totalIncome.toString());
                   setModalVisible(true);
                 }}
@@ -105,7 +109,7 @@ const HomeScreen = () => {
               </TouchableOpacity>
 
               <TouchableOpacity 
-                onPress={toggleTheme}
+                onPress={onToggleTheme}
                 style={[styles.iconButton, { backgroundColor: 'rgba(255,255,255,0.2)' }]}
               >
                 <Ionicons 
@@ -130,7 +134,10 @@ const HomeScreen = () => {
             amount={balance} 
             income={totalIncome}
             expenses={totalExpenses}
-            onMenuPress={() => setModalVisible(true)}
+            onMenuPress={() => {
+              triggerHaptic('light');
+              setModalVisible(true);
+            }}
           />
         </View>
 
@@ -140,7 +147,10 @@ const HomeScreen = () => {
           </Text>
           <Text 
             style={[styles.seeAll, { color: theme.textBrand }]}
-            onPress={() => navigation.navigate('Expenses')}
+            onPress={() => {
+              triggerHaptic('light');
+              navigation.navigate('Expenses');
+            }}
           >
             See All
           </Text>
@@ -151,7 +161,10 @@ const HomeScreen = () => {
             <ExpenseCard 
               key={expense.id} 
               expense={expense} 
-              onPress={() => navigation.navigate('AddExpense', { expense })}
+              onPress={() => {
+                triggerHaptic('light');
+                navigation.navigate('AddExpense', { expense });
+              }}
             />
           ))
         ) : (
@@ -166,13 +179,8 @@ const HomeScreen = () => {
         <View style={{ height: 120 }} />
       </ScrollView>
 
-      {/* Settings/Budget Modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+      {/* Settings Modal */}
+      <Modal animationType="fade" transparent visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: theme.cardBg }]}>
             <Text style={[styles.modalTitle, { color: theme.textPrimary }]}>Settings</Text>
@@ -207,40 +215,27 @@ const HomeScreen = () => {
               <Text style={[styles.resetButtonText, { color: theme.danger }]}>Reset Profile (Onboarding)</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              onPress={() => setModalVisible(false)}
-              style={styles.closeButton}
-            >
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
               <Text style={{ color: theme.textSecondary, fontWeight: FontWeight.semibold }}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      <CustomAlert 
-        {...alertConfig} 
-        onClose={closeAlert} 
-      />
+      <CustomAlert {...alertConfig} onClose={closeAlert} />
 
-      <FAB onPress={() => navigation.navigate('AddExpense')} />
+      <FAB onPress={() => {
+        triggerHaptic('medium');
+        navigation.navigate('AddExpense');
+      }} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  headerBg: { 
-    height: 180, 
-    borderBottomLeftRadius: Radius.xxl, 
-    borderBottomRightRadius: Radius.xxl, 
-    paddingHorizontal: Spacing.lg 
-  },
-  headerContent: { 
-    marginTop: Spacing.md, 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center' 
-  },
+  headerBg: { height: 180, borderBottomLeftRadius: Radius.xxl, borderBottomRightRadius: Radius.xxl, paddingHorizontal: Spacing.lg },
+  headerContent: { marginTop: Spacing.md, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   headerActions: { flexDirection: 'row' },
   greeting: { fontSize: FontSize.lg, fontWeight: FontWeight.medium },
   userName: { fontSize: FontSize.xl, fontWeight: FontWeight.bold },
@@ -248,65 +243,20 @@ const styles = StyleSheet.create({
   scrollView: { flex: 1, marginTop: -60 },
   scrollContent: { paddingBottom: Spacing.xl },
   statWrapper: { marginBottom: Spacing.lg },
-  sectionHeader: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    paddingHorizontal: Spacing.lg, 
-    marginBottom: Spacing.md, 
-    marginTop: Spacing.sm 
-  },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Spacing.lg, marginBottom: Spacing.md, marginTop: Spacing.sm },
   sectionTitle: { fontSize: FontSize.md, fontWeight: FontWeight.bold },
   seeAll: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
   emptyContainer: { padding: Spacing.xxxl, alignItems: 'center' },
   emptyText: { fontSize: FontSize.sm, textAlign: 'center' },
-  modalOverlay: { 
-    flex: 1, 
-    backgroundColor: 'rgba(0,0,0,0.6)', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    padding: Spacing.xl 
-  },
-  modalContent: { 
-    width: '100%', 
-    borderRadius: Radius.lg, 
-    padding: Spacing.xl, 
-    alignItems: 'center', 
-    elevation: 10 
-  },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: Spacing.xl },
+  modalContent: { width: '100%', borderRadius: Radius.lg, padding: Spacing.xl, alignItems: 'center', elevation: 10 },
   modalTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, marginBottom: Spacing.lg },
   inputWrapper: { width: '100%', marginBottom: Spacing.md },
-  inputLabel: { 
-    fontSize: FontSize.xs, 
-    fontWeight: FontWeight.bold, 
-    textTransform: 'uppercase', 
-    marginBottom: Spacing.sm, 
-    letterSpacing: 0.5 
-  },
-  budgetInput: { 
-    width: '100%', 
-    height: 54, 
-    borderRadius: Radius.md, 
-    borderWidth: 1, 
-    paddingHorizontal: Spacing.md, 
-    fontSize: FontSize.md, 
-    fontWeight: FontWeight.bold 
-  },
-  updateButton: { 
-    width: '100%', 
-    height: 50, 
-    borderRadius: Radius.md, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginTop: Spacing.sm 
-  },
+  inputLabel: { fontSize: FontSize.xs, fontWeight: FontWeight.bold, textTransform: 'uppercase', marginBottom: Spacing.sm, letterSpacing: 0.5 },
+  budgetInput: { width: '100%', height: 54, borderRadius: Radius.md, borderWidth: 1, paddingHorizontal: Spacing.md, fontSize: FontSize.md, fontWeight: FontWeight.bold },
+  updateButton: { width: '100%', height: 50, borderRadius: Radius.md, justifyContent: 'center', alignItems: 'center', marginTop: Spacing.sm },
   updateButtonText: { color: '#FFF', fontWeight: FontWeight.bold, fontSize: FontSize.base },
-  divider: { 
-    height: 1, 
-    backgroundColor: 'rgba(150,150,150,0.1)', 
-    width: '100%', 
-    marginVertical: Spacing.lg 
-  },
+  divider: { height: 1, backgroundColor: 'rgba(150,150,150,0.1)', width: '100%', marginVertical: Spacing.lg },
   resetButton: { flexDirection: 'row', alignItems: 'center', padding: Spacing.sm },
   resetButtonText: { fontWeight: FontWeight.bold, marginLeft: Spacing.sm },
   closeButton: { marginTop: Spacing.md, padding: Spacing.sm },

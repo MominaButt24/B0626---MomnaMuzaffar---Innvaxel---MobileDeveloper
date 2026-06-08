@@ -21,10 +21,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { validateExpense } from '../utils/validators';
 import { formatNumericDate } from '../utils/formatDate';
 import CustomAlert from '../components/CustomAlert';
+import { triggerHaptic } from '../utils/haptics';
 
 /**
- * AddEditScreen: Fully standardized using constants for styling.
- * Adapts to system Light/Dark theme.
+ * AddEditScreen: Standardized with constants and CustomAlert for beautiful feedback.
+ * Features haptic feedback on successful save/delete.
  */
 const AddEditScreen = () => {
   const { theme, isDarkMode } = useTheme();
@@ -42,6 +43,7 @@ const AddEditScreen = () => {
   const [notes, setNotes] = useState(editingExpense?.notes || ''); 
   const [showDatePicker, setShowDatePicker] = useState(false);
   
+  // Custom Alert State
   const [alertConfig, setAlertConfig] = useState({
     visible: false,
     title: '',
@@ -83,6 +85,8 @@ const AddEditScreen = () => {
       addExpense(expenseData);
     }
 
+    // Success feedback: Trigger success haptic and show alert
+    triggerHaptic('success');
     showAlert(
       'Success!', 
       isEditing ? 'Expense updated successfully.' : 'New expense added to your history.', 
@@ -97,6 +101,7 @@ const AddEditScreen = () => {
       'This transaction will be permanently removed.', 
       'warning', 
       () => {
+        triggerHaptic('medium');
         deleteExpense(editingExpense.id);
         navigation.goBack();
       }
@@ -105,7 +110,15 @@ const AddEditScreen = () => {
 
   const onDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
-    if (selectedDate) setDate(selectedDate);
+    if (selectedDate) {
+      triggerHaptic('light');
+      setDate(selectedDate);
+    }
+  };
+
+  const selectCategory = (label) => {
+    triggerHaptic('light');
+    setCategory(label);
   };
 
   return (
@@ -126,9 +139,10 @@ const AddEditScreen = () => {
       >
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           
+          {/* Title Input */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Title</Text>
-            <View style={[styles.inputContainer, { backgroundColor: theme.bgSecondary }]}>
+            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary }]}
                 placeholder="e.g. Shopping"
@@ -139,9 +153,10 @@ const AddEditScreen = () => {
             </View>
           </View>
 
+          {/* Amount Input */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Amount</Text>
-            <View style={[styles.inputContainer, { backgroundColor: theme.bgSecondary }]}>
+            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary }]}
                 placeholder="Rs 0.00"
@@ -153,11 +168,15 @@ const AddEditScreen = () => {
             </View>
           </View>
 
+          {/* Date Picker Field */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Date</Text>
             <TouchableOpacity 
-              style={[styles.inputContainer, { backgroundColor: theme.bgSecondary }]}
-              onPress={() => setShowDatePicker(true)}
+              style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}
+              onPress={() => {
+                triggerHaptic('light');
+                setShowDatePicker(true);
+              }}
             >
               <Text style={[styles.dateText, { color: theme.textPrimary }]}>
                 {formatNumericDate(date)}
@@ -175,9 +194,10 @@ const AddEditScreen = () => {
             />
           )}
 
+          {/* Notes */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Notes (Optional)</Text>
-            <View style={[styles.inputContainer, { backgroundColor: theme.bgSecondary, height: 80, alignItems: 'flex-start', paddingVertical: Spacing.sm }]}>
+            <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC', height: 80, alignItems: 'flex-start', paddingVertical: Spacing.sm }]}>
               <TextInput 
                 style={[styles.input, { color: theme.textPrimary, height: '100%' }]}
                 placeholder="Add details..."
@@ -189,6 +209,7 @@ const AddEditScreen = () => {
             </View>
           </View>
 
+          {/* Categories Grid */}
           <Text style={[styles.label, { color: theme.textPrimary, marginTop: Spacing.sm }]}>Category</Text>
           <View style={styles.categoryGrid}>
             {CATEGORIES.map((cat) => {
@@ -197,17 +218,17 @@ const AddEditScreen = () => {
                 <TouchableOpacity 
                   key={cat.label}
                   style={styles.categoryItem}
-                  onPress={() => setCategory(cat.label)}
+                  onPress={() => selectCategory(cat.label)}
                 >
                   <View style={[
                     styles.categoryIconCircle, 
-                    { backgroundColor: isActive ? theme.bgBrand : (isDarkMode ? theme.bgTertiary : cat.color + '15') }
+                    { backgroundColor: isActive ? '#3B82F6' : (isDarkMode ? '#1E222E' : cat.color + '15') }
                   ]}>
-                    <Ionicons name={cat.icon} size={24} color={isActive ? theme.textInverse : cat.color} />
+                    <Ionicons name={cat.icon} size={24} color={isActive ? '#FFF' : cat.color} />
                   </View>
                   <Text style={[
                     styles.categoryItemText, 
-                    { color: isActive ? theme.bgBrand : theme.textSecondary, fontWeight: isActive ? FontWeight.bold : FontWeight.medium }
+                    { color: isActive ? '#3B82F6' : theme.textSecondary, fontWeight: isActive ? FontWeight.bold : FontWeight.medium }
                   ]}>
                     {cat.label}
                   </Text>
@@ -216,12 +237,13 @@ const AddEditScreen = () => {
             })}
           </View>
 
+          {/* Save Button */}
           <TouchableOpacity 
-            style={[styles.saveButton, { backgroundColor: theme.bgBrand }]} 
+            style={[styles.saveButton, { backgroundColor: '#3B82F6' }]} 
             onPress={handleSave}
             activeOpacity={0.8}
           >
-            <Text style={[styles.saveButtonText, { color: theme.textInverse }]}>Save Transaction</Text>
+            <Text style={[styles.saveButtonText, { color: '#FFF' }]}>Save Transaction</Text>
           </TouchableOpacity>
 
           {isEditing && (
@@ -255,7 +277,7 @@ const styles = StyleSheet.create({
   },
   backButton: { padding: Spacing.sm },
   headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
-  scrollContent: { padding: Spacing.lg, paddingBottom: 100 },
+  scrollContent: { padding: Spacing.lg, paddingBottom: 60 },
   formGroup: { marginBottom: Spacing.lg },
   label: { fontSize: FontSize.base, fontWeight: FontWeight.bold, marginBottom: Spacing.sm },
   inputContainer: { 
@@ -285,9 +307,9 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     marginTop: Spacing.md, 
     elevation: 4, 
-    shadowColor: '#000', 
+    shadowColor: '#3B82F6', 
     shadowOffset: { width: 0, height: 4 }, 
-    shadowOpacity: 0.1, 
+    shadowOpacity: 0.3, 
     shadowRadius: 8 
   },
   saveButtonText: { fontSize: FontSize.md, fontWeight: FontWeight.bold },
