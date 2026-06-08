@@ -9,8 +9,8 @@ import { triggerHaptic } from '../utils/haptics';
 const { width } = Dimensions.get('window');
 
 /**
- * CustomAlert: A beautiful, themed replacement for standard Alert.alert.
- * Automatically triggers haptic feedback based on the alert type.
+ * CustomAlert: A beautiful, themed replacement for standard Alert.alert
+ * Automatically triggers haptic feedback based on the alert type
  */
 const CustomAlert = ({ 
   visible, 
@@ -20,14 +20,14 @@ const CustomAlert = ({
   onConfirm, 
   confirmText = "OK", 
   cancelText = "Cancel",
-  type = "info" // 'info', 'success', 'error', 'warning'
+  type = "info"
 }) => {
   const { theme, isDarkMode } = useTheme();
   const [scaleValue] = React.useState(new Animated.Value(0));
 
   React.useEffect(() => {
     if (visible) {
-      // Trigger haptic feedback when the alert appears
+      // triggers haptic feedback when the alert appears
       triggerHaptic(type);
 
       Animated.spring(scaleValue, {

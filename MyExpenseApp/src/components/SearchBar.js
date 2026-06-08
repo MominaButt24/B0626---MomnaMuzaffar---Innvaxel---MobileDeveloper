@@ -6,7 +6,7 @@ import { Spacing, Radius } from '../constants/spacing';
 import { FontSize } from '../constants/typography';
 
 /**
- * SearchBar: A reusable themed search input.
+ * search bar: filter the expenses on the title ad notes basis
  */
 const SearchBar = ({ value, onChangeText, placeholder = "Search transactions..." }) => {
   const { theme, isDarkMode } = useTheme();

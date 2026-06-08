@@ -1,6 +1,4 @@
-// src/constants/colors.js
-// Raw color palette inspired by the sky blue / dream theme.
-
+//color palette inspired by the sky blue / dream theme.
 const palette = {
   // Brand / Sky Theme
   skyLight:   '#E0F7FA', // Very light blue

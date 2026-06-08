@@ -1,6 +1,4 @@
-// src/constants/typography.js
-// Font sizes, weights, and line heights only.
-// No colors here — colors come from the active theme at runtime.
+// Font sizes, weights and line heights
 
 export const FontSize = {
   xs:   11,

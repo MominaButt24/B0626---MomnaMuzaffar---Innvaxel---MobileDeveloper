@@ -7,11 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
 import { formatDate } from '../utils/formatDate';
 
-/**
- * Enhanced ExpenseCard Component
- * Uses icons instead of emojis and follows the Sky/Dream theme.
- * Integrated with utility functions for consistent formatting.
- */
+
 const ExpenseCard = ({ expense, onPress }) => {
   const { theme, isDarkMode } = useTheme();
   

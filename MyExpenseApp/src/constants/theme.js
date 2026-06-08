@@ -1,6 +1,3 @@
-// src/constants/theme.js
-// Theme tokens inspired by the sky blue / dream image provided.
-
 import palette from './colors';
 
 export const lightTheme = {

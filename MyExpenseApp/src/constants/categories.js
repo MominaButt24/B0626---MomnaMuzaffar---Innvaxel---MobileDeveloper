@@ -1,5 +1,3 @@
-// src/constants/categories.js
-
 export const CATEGORIES = [
   { label: 'Food',           icon: 'fast-food-outline',     color: '#FF8A80' }, // Pinkish/Red
   { label: 'Transport',      icon: 'car-outline',           color: '#81D4FA' }, // Blue

@@ -5,8 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Shadow } from '../constants/spacing';
 
 /**
- * Floating Action Button (FAB)
- * Adjusted to sit slightly lower to align with the visual weight of the custom tab bar.
+ * Floating Action Button (FAB) for adding new expenses
  */
 const FAB = ({ onPress, icon = 'add' }) => {
   const { theme } = useTheme();
@@ -34,8 +33,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 37, // Lowered slightly from the previous position to sit deeper in the bar area
-    right: 35,  // Aligned with the slot on the right
+    bottom: 37,
+    right: 35,
     zIndex: 1000,
     elevation: 12,
     shadowColor: '#000',

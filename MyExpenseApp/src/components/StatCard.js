@@ -7,10 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
 
 /**
- * StatCard component: Standardized with constants.
- * The card color is now adaptable to the active theme while maintaining focus.
- * User icon is positioned on the right, opposite to the balance amount, 
- * styled clearly as a PNG like in the Summary Screen.
+ * stat card: display the balance, income and expenses
  */
 const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) => {
   const { theme } = useTheme();
