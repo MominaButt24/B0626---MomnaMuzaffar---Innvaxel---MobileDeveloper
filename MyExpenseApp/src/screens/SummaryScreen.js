@@ -1,3 +1,14 @@
+/**
+ * SummaryScreen.js
+ * 
+ * This screen is the "Big Picture" view of the app. It takes all the individual 
+ * expenses the user has logged and turns them into something meaningful—like 
+ * donut charts and progress bars.
+ * 
+ * I built this to help users quickly see where their money is leaking (like too 
+ * many Starbucks runs or high rent) without digging through a long list.
+ */
+
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, StatusBar, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,14 +22,14 @@ import SummaryDonut from '../components/SummaryDonut';
 import { calculateCategoryTotals } from '../utils/calcSummary';
 import { formatCurrency } from '../utils/formatCurrency';
 
-/**
- * SummaryScreen: Provides a visual breakdown of spending by category.
- * Enhanced with a branded header and visual icons.
- */
 const SummaryScreen = () => {
+  // Pulling theme (dark/light) and expenses from our context "buckets"
   const { theme, isDarkMode } = useTheme();
   const { expenses = [], totalExpenses = 0 } = useExpenses();
 
+  // useMemo is a lifesaver here. It stops the app from re-calculating 
+  // the totals every single time the screen flickers. 
+  // It only runs when the 'expenses' list actually changes.
   const chartData = useMemo(() => 
     calculateCategoryTotals(expenses, CATEGORIES), 
     [expenses]
@@ -26,9 +37,10 @@ const SummaryScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
+      {/* Making the top bar white text because our header is dark/branded */}
       <StatusBar barStyle="light-content" />
 
-      {/* Enhanced Branded Header */}
+      {/* Branded Header: I used the primary brand color here to give it some personality */}
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
@@ -52,7 +64,7 @@ const SummaryScreen = () => {
         contentContainerStyle={styles.scrollContent} 
         showsVerticalScrollIndicator={false}
       >
-        {/* Total Spending Card with PNG Icon */}
+        {/* Total Spending Card: Using a hardcoded dark color for that 'premium' look */}
         <View style={styles.statWrapper}>
           <View style={[styles.totalCard, { backgroundColor: '#1E293B' }]}>
             <View style={styles.cardTopRow}>
@@ -62,6 +74,7 @@ const SummaryScreen = () => {
                   {formatCurrency(totalExpenses)}
                 </Text>
               </View>
+              {/* Added a little profit icon just to make it look more like a real banking app */}
               <Image 
                 source={require('../assets/financial-profit.png')} 
                 style={styles.moneyIcon}
@@ -71,7 +84,7 @@ const SummaryScreen = () => {
           </View>
         </View>
 
-        {/* Visual Donut Chart */}
+        {/* The Donut Chart: Only show it if there's actually money spent */}
         {totalExpenses > 0 && (
           <View style={styles.chartWrapper}>
              <SummaryDonut data={chartData} total={totalExpenses} />
@@ -80,10 +93,14 @@ const SummaryScreen = () => {
 
         <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>Category Breakdown</Text>
         
+        {/* This is the list of categories with those neat progress bars */}
         <View style={[styles.breakdownCard, { backgroundColor: theme.cardBg }]}>
           {chartData.length > 0 ? (
             chartData.map((item) => {
+              // Calculating what % this category is of the total
               const percentage = totalExpenses > 0 ? (item.amount / totalExpenses) : 0;
+              
+              // Find the right icon and color from our settings
               const categoryInfo = CATEGORIES.find(c => c.label === item.category) || CATEGORIES[CATEGORIES.length - 1];
               
               return (
@@ -103,14 +120,14 @@ const SummaryScreen = () => {
                     </Text>
                   </View>
                   
-                  {/* Visual Progress Bar */}
+                  {/* Progress Bar: The width is dynamic based on spending */}
                   <View style={[styles.progressBase, { backgroundColor: isDarkMode ? '#1E222E' : '#F1F5F9' }]}>
                     <View 
                       style={[
                         styles.progressFill, 
                         { 
                           backgroundColor: categoryInfo.color, 
-                          width: `${Math.max(percentage * 100, 2)}%` 
+                          width: `${Math.max(percentage * 100, 2)}%` // Always show at least 2% so it's visible
                         }
                       ]} 
                     />
@@ -119,6 +136,7 @@ const SummaryScreen = () => {
               );
             })
           ) : (
+            // If the list is empty, show this nice placeholder
             <View style={styles.emptyState}>
               <Ionicons name="stats-chart-outline" size={48} color={theme.textMuted} style={{ marginBottom: Spacing.md }} />
               <Text style={{ color: theme.textSecondary, textAlign: 'center' }}>
@@ -128,6 +146,7 @@ const SummaryScreen = () => {
           )}
         </View>
         
+        {/* Extra padding at the bottom so the Tab Bar doesn't cover anything */}
         <View style={{ height: 120 }} />
       </ScrollView>
     </View>
@@ -161,7 +180,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginTop: -50,
+    marginTop: -50, // Pulls the content up over the branded header
   },
   scrollContent: { 
     padding: Spacing.lg 

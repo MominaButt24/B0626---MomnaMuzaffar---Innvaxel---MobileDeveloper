@@ -1,3 +1,11 @@
+/**
+ * OnboardingScreen.js
+ * 
+ * This is the first-time user experience. It's designed to be clean and welcoming.
+ * We collect the user's name here to personalize the dashboard, making the app 
+ * feel more like a personal financial assistant rather than just a spreadsheet.
+ */
+
 import React, { useState } from 'react';
 import { 
   View, 
@@ -20,31 +28,39 @@ import CustomAlert from '../components/CustomAlert';
 
 const { width } = Dimensions.get('window');
 
-/**
- * OnboardingScreen: Standardized with constants and CustomAlert.
- */
 const OnboardingScreen = () => {
+  // Grabbing the theme and the function to save the user's name
   const { theme, isDarkMode } = useTheme();
   const { completeOnboarding } = useExpenses(); 
   const [name, setName] = useState('');
   const [alertVisible, setAlertVisible] = useState(false);
 
   const handleGetStarted = () => {
+    // Basic check: don't let them in without a name!
     if (!name.trim()) {
       setAlertVisible(true);
       return;
     }
+    // Tell the global state that we're officially done with the welcome tour
     completeOnboarding(name.trim());
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.bgPrimary }]}>
+      {/* 
+          KeyboardAvoidingView is crucial here so the input doesn't get 
+          covered up when the keyboard opens on smaller phones.
+      */}
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex}
       >
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          {/* Visual Illustration Area */}
+          
+          {/* 
+              Visual Area: I used simple geometric shapes and a brand icon 
+              to make the screen feel modern and high-end. 
+          */}
           <View style={styles.imageContainer}>
             <View style={[styles.circle, { backgroundColor: theme.bgSecondary, width: width * 0.7, height: width * 0.7, borderRadius: (width * 0.7) / 2 }]}>
               <View style={[styles.innerCircle, { backgroundColor: theme.bgBrand, width: width * 0.45, height: width * 0.45, borderRadius: (width * 0.45) / 2 }]}>
@@ -53,7 +69,7 @@ const OnboardingScreen = () => {
             </View>
           </View>
 
-          {/* Welcome Text */}
+          {/* Welcome Text Section */}
           <View style={styles.textSection}>
             <Text style={[styles.title, { color: theme.textPrimary }]}>
               Welcome to{"\n"}SpendWise
@@ -63,7 +79,7 @@ const OnboardingScreen = () => {
             </Text>
           </View>
 
-          {/* Name Input Field */}
+          {/* Personalized Name Input */}
           <View style={styles.inputWrapper}>
             <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC' }]}>
               <Ionicons name="person-outline" size={20} color={theme.textMuted} style={{ marginRight: Spacing.md }} />
@@ -78,7 +94,7 @@ const OnboardingScreen = () => {
             </View>
           </View>
 
-          {/* Bottom Button */}
+          {/* The "Get Started" Button: Big, bright, and easy to hit */}
           <View style={styles.footer}>
             <TouchableOpacity 
               style={[styles.button, { backgroundColor: theme.bgBrand }]} 
@@ -92,6 +108,7 @@ const OnboardingScreen = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
+      {/* Nice custom popup if they forget to type their name */}
       <CustomAlert 
         visible={alertVisible}
         title="Whoops!"

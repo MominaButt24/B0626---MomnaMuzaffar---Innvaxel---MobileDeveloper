@@ -1,3 +1,13 @@
+/**
+ * CustomAlert.js
+ * 
+ * Standard system alerts look a bit boring and don't match the app's theme.
+ * I created this component to have full control over how popups look.
+ * 
+ * It supports different 'types' (success, error, warning) and automatically 
+ * triggers the right vibration (haptic) so users "feel" the alert.
+ */
+
 import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Animated, Dimensions } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
@@ -8,10 +18,6 @@ import { triggerHaptic } from '../utils/haptics';
 
 const { width } = Dimensions.get('window');
 
-/**
- * CustomAlert: A beautiful, themed replacement for standard Alert.alert
- * Automatically triggers haptic feedback based on the alert type
- */
 const CustomAlert = ({ 
   visible, 
   title, 
@@ -23,25 +29,30 @@ const CustomAlert = ({
   type = "info"
 }) => {
   const { theme, isDarkMode } = useTheme();
+  
+  // Using an Animated value for a smooth "springy" entrance
   const [scaleValue] = React.useState(new Animated.Value(0));
 
   React.useEffect(() => {
     if (visible) {
-      // triggers haptic feedback when the alert appears
+      // Whenever the alert pops up, give the user a little physical feedback
       triggerHaptic(type);
 
+      // Simple spring animation to make it pop out nicely
       Animated.spring(scaleValue, {
         toValue: 1,
         friction: 8,
         useNativeDriver: true,
       }).start();
     } else {
+      // Reset scale when hidden
       scaleValue.setValue(0);
     }
   }, [visible, type]);
 
   if (!visible) return null;
 
+  // Helper to pick the right icon and color based on what's happening
   const getIcon = () => {
     switch (type) {
       case 'success': return { name: 'checkmark-circle', color: theme.success };
@@ -62,12 +73,14 @@ const CustomAlert = ({
           Shadow.md
         ]}>
           <View style={styles.content}>
+            {/* Big icon at the top so the user immediately knows the status */}
             <Ionicons name={icon.name} size={50} color={icon.color} style={styles.icon} />
             <Text style={[styles.title, { color: theme.textPrimary }]}>{title}</Text>
             <Text style={[styles.message, { color: theme.textSecondary }]}>{message}</Text>
           </View>
 
           <View style={[styles.buttonRow, { borderTopColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
+            {/* If we have a confirm action, show a 'Cancel' button alongside it */}
             {onConfirm && (
               <TouchableOpacity 
                 style={[styles.button, styles.cancelButton, { borderRightColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]} 
@@ -79,6 +92,8 @@ const CustomAlert = ({
                 <Text style={[styles.buttonText, { color: theme.textSecondary }]}>{cancelText}</Text>
               </TouchableOpacity>
             )}
+            
+            {/* The primary action button */}
             <TouchableOpacity 
               style={styles.button} 
               onPress={() => {
@@ -101,7 +116,7 @@ const CustomAlert = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.6)', // Dim the background to focus on the alert
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,

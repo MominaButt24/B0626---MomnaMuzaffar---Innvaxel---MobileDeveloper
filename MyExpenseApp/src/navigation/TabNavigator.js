@@ -1,3 +1,14 @@
+/**
+ * TabNavigator.js
+ * 
+ * This is the bottom navigation bar. I went with a "Floating" design 
+ * rather than the standard flat bar at the bottom. It gives the app 
+ * a much more modern, lightweight feel.
+ * 
+ * I also added a little indicator dot under the active icons so users 
+ * always know exactly which screen they are looking at.
+ */
+
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +24,7 @@ import FAB from '../components/FAB';
 
 const Tab = createBottomTabNavigator();
 
+// Empty component just to reserve space in the tab bar
 const Placeholder = () => null;
 
 const TabNavigator = () => {
@@ -24,11 +36,11 @@ const TabNavigator = () => {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
-          tabBarShowLabel: false,
+          tabBarShowLabel: false, // We use icons only for a cleaner look
           tabBarStyle: {
             backgroundColor: isDarkMode ? '#1E222E' : '#FFFFFF',
             position: 'absolute',
-            bottom: 25,
+            bottom: 25, // Lifting it up to create the "floating" effect
             left: 20,
             right: 20,
             height: 70,
@@ -55,6 +67,7 @@ const TabNavigator = () => {
             tabBarIcon: ({ color, focused }) => (
               <View style={styles.iconWrapper}>
                 <Ionicons name={focused ? "home" : "home-outline"} size={26} color={color} />
+                {/* The little indicator dot appears when the tab is active */}
                 {focused && <View style={[styles.dot, { backgroundColor: color }]} />}
               </View>
             ),
@@ -85,7 +98,10 @@ const TabNavigator = () => {
           }}
         />
         
-        {/* Placeholder slot to create space for the FAB on the extreme right */}
+        {/* 
+          Placeholder slot to create space for the FAB on the extreme right. 
+          This keeps the icons from being covered by the floating plus button.
+        */}
         <Tab.Screen 
           name="AddPlaceholder" 
           component={Placeholder} 
@@ -95,7 +111,10 @@ const TabNavigator = () => {
         />
       </Tab.Navigator>
 
-      {/* FAB perfectly aligned with the rightmost slot */}
+      {/* 
+          FAB perfectly aligned with the rightmost slot. 
+          It's outside the Tab.Navigator so it stays on top of everything.
+      */}
       <FAB onPress={() => navigation.navigate('AddExpense')} />
     </View>
   );

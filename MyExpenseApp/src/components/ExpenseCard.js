@@ -1,3 +1,13 @@
+/**
+ * ExpenseCard.js
+ * 
+ * This is the individual row item you see in the transaction lists.
+ * It shows the category icon, the title, the date, and the amount spent.
+ * 
+ * I designed it to be clean and readable, with a subtle chevron at the 
+ * end to hint to the user that they can tap it to edit the expense.
+ */
+
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
@@ -7,10 +17,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
 import { formatDate } from '../utils/formatDate';
 
-
 const ExpenseCard = ({ expense, onPress }) => {
   const { theme, isDarkMode } = useTheme();
   
+  // Find the right category info (icon and color) based on the label
   const categoryData = CATEGORIES.find(c => c.label === expense.category) || CATEGORIES[CATEGORIES.length - 1];
   const iconName = categoryData.icon;
   const iconColor = categoryData.color;
@@ -26,7 +36,10 @@ const ExpenseCard = ({ expense, onPress }) => {
       activeOpacity={0.7}
     >
       <View style={styles.leftContent}>
-        {/* Themed Icon Container */}
+        {/* 
+            Icon Container: Uses a semi-transparent version of the category 
+            color for the background to make the icon pop.
+        */}
         <View style={[
           styles.iconCircle, 
           { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : iconColor + '15' }
@@ -45,6 +58,7 @@ const ExpenseCard = ({ expense, onPress }) => {
       </View>
 
       <View style={styles.rightContent}>
+        {/* All expenses are shown as negative (spent) amounts */}
         <Text style={[styles.amount, { color: theme.danger }]}>
           -{formatCurrency(expense.amount)}
         </Text>

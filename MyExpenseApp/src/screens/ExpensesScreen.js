@@ -1,3 +1,14 @@
+/**
+ * ExpensesScreen.js
+ * 
+ * This is the full transaction history of the app. I built this so users 
+ * can dig deep into their past spending. 
+ * 
+ * It includes a powerful search bar and category filters because once 
+ * you have hundreds of expenses, finding that one specific receipt 
+ * becomes a nightmare without them.
+ */
+
 import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, SectionList, TouchableOpacity, ScrollView, StatusBar, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,30 +21,28 @@ import ExpenseCard from '../components/ExpenseCard';
 import SearchBar from '../components/SearchBar';
 import { useNavigation } from '@react-navigation/native';
 import { groupExpensesByDate } from '../utils/groupByDate';
-import { Ionicons } from '@expo/vector-icons'; // Ensure this is imported
+import { Ionicons } from '@expo/vector-icons';
 
-/**
- * ExpensesScreen: Transaction history with Search and Category filtering.
- * Enhanced with a branded header and a functional Search Bar.
- */
 const ExpensesScreen = () => {
   const { theme, isDarkMode } = useTheme();
   const { expenses } = useExpenses();
   const navigation = useNavigation();
   
+  // Local state for our filters
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
   // 1. Unified Filtering Logic (Category + Search)
+  // I used useMemo here so the filtering doesn't lag the UI while typing
   const filteredExpenses = useMemo(() => {
     let result = expenses;
     
-    // Filter by Category
+    // Filter by Category first
     if (selectedCategory !== 'All') {
       result = result.filter(e => e.category === selectedCategory);
     }
     
-    // Filter by Search Query
+    // Then filter by what the user typed in the search bar
     if (searchQuery.trim().length > 0) {
       const query = searchQuery.toLowerCase();
       result = result.filter(e => 
@@ -45,7 +54,7 @@ const ExpensesScreen = () => {
     return result;
   }, [expenses, selectedCategory, searchQuery]);
 
-  // 2. Group the final filtered list by date
+  // 2. Group the final filtered list by date (e.g., "Today", "Yesterday")
   const sections = useMemo(() => groupExpensesByDate(filteredExpenses), [filteredExpenses]);
 
   const categoriesWithAll = ['All', ...CATEGORIES.map(c => c.label)];
@@ -54,7 +63,7 @@ const ExpensesScreen = () => {
     <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
       <StatusBar barStyle="light-content" />
       
-      {/* Branded Header */}
+      {/* Branded Header: Matches the Home and Summary screens for consistency */}
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
@@ -73,7 +82,7 @@ const ExpensesScreen = () => {
         </SafeAreaView>
       </View>
 
-      {/* Search Bar */}
+      {/* The Search Bar: Floats slightly over the header */}
       <View style={styles.searchWrapper}>
         <SearchBar 
           value={searchQuery} 
@@ -82,7 +91,7 @@ const ExpensesScreen = () => {
         />
       </View>
 
-      {/* Category Filter Bar */}
+      {/* Category Filter Bar: Horizontal scrollable chips */}
       <View style={styles.filterWrapper}>
         <ScrollView 
           horizontal 
@@ -112,6 +121,10 @@ const ExpensesScreen = () => {
         </ScrollView>
       </View>
       
+      {/* 
+        SectionList is perfect here because it handles the "Today", "Yesterday" 
+        headers automatically and is very memory efficient for long lists.
+      */}
       <SectionList
         sections={sections}
         keyExtractor={(item) => item.id}
@@ -129,6 +142,7 @@ const ExpensesScreen = () => {
         )}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
+          // Empty state: Shows a search icon if nothing was found
           <View style={styles.emptyContainer}>
             <Ionicons name="search-outline" size={48} color={theme.textMuted} style={{ marginBottom: 12 }} />
             <Text style={[styles.emptyText, { color: theme.textSecondary }]}>

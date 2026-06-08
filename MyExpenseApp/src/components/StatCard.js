@@ -1,3 +1,14 @@
+/**
+ * StatCard.js
+ * 
+ * This is the "Credit Card" style component you see on the home screen.
+ * It's designed to look like a premium bank card, showing the user's 
+ * overall balance, monthly income, and total spending.
+ * 
+ * I added a little 'header dot' and some overlapping circles at the 
+ * bottom to give it that "Fintech" vibe.
+ */
+
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
@@ -6,12 +17,10 @@ import { FontSize, FontWeight } from '../constants/typography';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrency } from '../utils/formatCurrency';
 
-/**
- * stat card: display the balance, income and expenses
- */
 const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) => {
   const { theme } = useTheme();
 
+  // Ensuring we have valid numbers before doing any math or display
   const safeAmount = Number(amount) || 0;
   const safeIncome = Number(income) || 0;
   const safeExpenses = Number(expenses) || 0;
@@ -22,7 +31,7 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) 
       { backgroundColor: theme.bgBrandElevated },
       Shadow.md
     ]}>
-      {/* Top Row: Label and Menu */}
+      {/* Top Row: The label (Total Balance) and a small menu button */}
       <View style={styles.topRow}>
         <View style={styles.titleSection}>
           <View style={styles.headerDot} />
@@ -33,13 +42,13 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) 
         </TouchableOpacity>
       </View>
 
-      {/* Middle Section: Main Balance and User PNG Icon */}
+      {/* Middle Section: Big Balance display and the user icon */}
       <View style={styles.balanceRow}>
         <Text style={[styles.balanceText, { color: theme.textInverse }]}>
           {formatCurrency(safeAmount)}
         </Text>
         
-        {/* User PNG Icon - Positioned opposite to the amount */}
+        {/* Just a decorative user icon to fill the space nicely */}
         <Image 
           source={require('../assets/user.png')} 
           style={styles.userIcon}
@@ -47,9 +56,10 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) 
         />
       </View>
 
-      {/* Bottom Section: Income and Expenses */}
+      {/* Bottom Section: Side-by-side Income and Expense stats */}
       <View style={styles.footerSection}>
         <View style={styles.statsRow}>
+          {/* Income block with a blue down arrow */}
           <View style={styles.statItem}>
             <View style={styles.statHeader}>
               <View style={[styles.iconCircle, { backgroundColor: '#3B82F6' }]}>
@@ -60,6 +70,7 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) 
             <Text style={styles.statValue}>{formatCurrency(safeIncome)}</Text>
           </View>
 
+          {/* Expense block with a red up arrow (using theme.danger) */}
           <View style={[styles.statItem, { marginLeft: Spacing.xl }]}>
             <View style={styles.statHeader}>
               <View style={[styles.iconCircle, { backgroundColor: theme.danger }]}>
@@ -71,6 +82,7 @@ const StatCard = ({ title, amount = 0, income = 0, expenses = 0, onMenuPress }) 
           </View>
         </View>
 
+        {/* Decorative overlapping circles - looks like a card logo */}
         <View style={styles.logoContainer}>
           <View style={[styles.circle, { backgroundColor: 'rgba(255,255,255,0.2)', marginRight: -12 }]} />
           <View style={[styles.circle, { backgroundColor: 'rgba(255,255,255,0.1)' }]} />
@@ -86,7 +98,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.xxl,
     marginHorizontal: Spacing.lg,
     marginTop: Spacing.md,
-    height: 205,
+    height: 205, // Fixed height so the design stays consistent
     justifyContent: 'space-between',
     elevation: 8,
     shadowColor: '#000',

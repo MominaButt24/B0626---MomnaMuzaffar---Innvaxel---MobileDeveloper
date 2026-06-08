@@ -1,8 +1,16 @@
 /**
- * Utility to group a flat list of expenses by their date.
- * Returns an array of objects suitable for a SectionList: [{ title: 'Date', data: [...] }]
+ * groupByDate.js
+ * 
+ * This utility is what makes the History screen look organized. 
+ * Instead of one giant list, it groups expenses by day, so you 
+ * see headers like "Today", "Yesterday", or "Oct 12, 2023".
+ * 
+ * It converts a flat array into a format that the React Native 
+ * SectionList component loves.
  */
+
 export const groupExpensesByDate = (expenses) => {
+  // We use reduce to bucket the expenses by their date string
   const groups = expenses.reduce((groups, expense) => {
     const date = new Date(expense.date);
     const today = new Date();
@@ -11,12 +19,13 @@ export const groupExpensesByDate = (expenses) => {
 
     let title = '';
     
-    // Check if the date is Today, Yesterday, or a specific date
+    // We check if the date is Today or Yesterday for a better user experience
     if (date.toDateString() === today.toDateString()) {
       title = 'Today';
     } else if (date.toDateString() === yesterday.toDateString()) {
       title = 'Yesterday';
     } else {
+      // Otherwise, we just format it as a standard date
       title = date.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -24,6 +33,7 @@ export const groupExpensesByDate = (expenses) => {
       });
     }
 
+    // If this date "bucket" doesn't exist yet, create it
     if (!groups[title]) {
       groups[title] = [];
     }
@@ -31,7 +41,7 @@ export const groupExpensesByDate = (expenses) => {
     return groups;
   }, {});
 
-  // Convert the object into an array of sections
+  // SectionList needs an array of objects with 'title' and 'data' keys
   return Object.keys(groups).map((date) => {
     return {
       title: date,

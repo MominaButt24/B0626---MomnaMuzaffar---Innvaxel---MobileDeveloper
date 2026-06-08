@@ -1,3 +1,14 @@
+/**
+ * AddEditScreen.js
+ * 
+ * This is the workhorse of the app. It's a dual-purpose screen:
+ * 1. Adding new expenses from scratch.
+ * 2. Editing existing ones if the user made a mistake.
+ * 
+ * I tried to make the form feel very snappy with haptic feedback and a 
+ * clean category grid so users can log their spending in under 10 seconds.
+ */
+
 import React, { useState } from 'react';
 import { 
   View, 
@@ -24,27 +35,25 @@ import { formatNumericDate } from '../utils/formatDate';
 import CustomAlert from '../components/CustomAlert';
 import { triggerHaptic } from '../utils/haptics';
 
-/**
- * AddEditScreen: Standardized with constants and CustomAlert for beautiful feedback.
- * Features haptic feedback on successful save/delete.
- */
 const AddEditScreen = () => {
   const { theme, isDarkMode } = useTheme();
   const { addExpense, updateExpense, deleteExpense } = useExpenses();
   const navigation = useNavigation();
   const route = useRoute();
   
+  // Checking if we're editing an old expense or starting a new one
   const editingExpense = route.params?.expense;
   const isEditing = !!editingExpense;
 
+  // Setting up our form states
   const [title, setTitle] = useState(editingExpense?.title || '');
   const [amount, setAmount] = useState(editingExpense?.amount?.toString() || '');
   const [category, setCategory] = useState(editingExpense?.category || CATEGORIES[0].label);
   const [date, setDate] = useState(new Date(editingExpense?.date || Date.now()));
   const [notes, setNotes] = useState(editingExpense?.notes || ''); 
   const [showDatePicker, setShowDatePicker] = useState(false);
-  
-  // Custom Alert State
+
+  // Pretty alert state
   const [alertConfig, setAlertConfig] = useState({
     visible: false,
     title: '',
@@ -65,6 +74,7 @@ const AddEditScreen = () => {
     const dataToValidate = { title, amount, category, date };
     const validation = validateExpense(dataToValidate);
 
+    // Don't let the user save if the title or amount is empty
     if (!validation.isValid) {
       const firstError = Object.values(validation.errors)[0];
       showAlert('Missing Info', firstError, 'error');
@@ -80,13 +90,14 @@ const AddEditScreen = () => {
       notes: notes.trim(),
     };
 
+    // Update if it exists, otherwise add it as a new entry
     if (isEditing) {
       updateExpense(expenseData);
     } else {
       addExpense(expenseData);
     }
 
-    // Success feedback: Trigger success haptic and show alert
+    // Give the user some tactile feedback and show a success message
     triggerHaptic('success');
     showAlert(
       'Success!', 
@@ -124,6 +135,7 @@ const AddEditScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.bgPrimary }]} edges={['top', 'bottom']}>
+      {/* Top Navigation Bar */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={theme.textPrimary} />
@@ -138,6 +150,7 @@ const AddEditScreen = () => {
         />
       </View>
 
+      {/* KeyboardAvoidingView keeps the form visible when the keyboard pops up */}
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex}
@@ -173,7 +186,7 @@ const AddEditScreen = () => {
             </View>
           </View>
 
-          {/* Date Picker Field */}
+          {/* Date Picker Field - opens a calendar popover */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Date</Text>
             <TouchableOpacity 
@@ -199,7 +212,7 @@ const AddEditScreen = () => {
             />
           )}
 
-          {/* Notes */}
+          {/* Notes: Let the user add a bit more detail if they want */}
           <View style={styles.formGroup}>
             <Text style={[styles.label, { color: theme.textPrimary }]}>Notes (Optional)</Text>
             <View style={[styles.inputContainer, { backgroundColor: isDarkMode ? '#1E222E' : '#F8FAFC', height: 80, alignItems: 'flex-start', paddingVertical: Spacing.sm }]}>
@@ -214,7 +227,7 @@ const AddEditScreen = () => {
             </View>
           </View>
 
-          {/* Categories Grid */}
+          {/* Categories Grid: Using a visual grid instead of a boring dropdown */}
           <Text style={[styles.label, { color: theme.textPrimary, marginTop: Spacing.sm }]}>Category</Text>
           <View style={styles.categoryGrid}>
             {CATEGORIES.map((cat) => {
@@ -242,7 +255,7 @@ const AddEditScreen = () => {
             })}
           </View>
 
-          {/* Save Button */}
+          {/* Save Button: Big and easy to tap */}
           <TouchableOpacity 
             style={[styles.saveButton, { backgroundColor: '#3B82F6' }]} 
             onPress={handleSave}
@@ -251,6 +264,7 @@ const AddEditScreen = () => {
             <Text style={[styles.saveButtonText, { color: '#FFF' }]}>Save Transaction</Text>
           </TouchableOpacity>
 
+          {/* Delete Button: Only shown when editing, obviously */}
           {isEditing && (
             <TouchableOpacity 
               style={styles.deleteButton} 

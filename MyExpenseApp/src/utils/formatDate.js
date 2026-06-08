@@ -1,9 +1,14 @@
 /**
- * Utility functions for date formatting.
+ * formatDate.js
+ * 
+ * Date objects in JavaScript are notoriously messy to look at. 
+ * These helpers turn those long timestamps into something 
+ * a human can actually read.
  */
 
 /**
- * Returns a readable date string (e.g., "Jan 15, 2024")
+ * Returns a readable date string like "Jan 15, 2024".
+ * Used mainly in the expense list cards.
  */
 export const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -16,7 +21,8 @@ export const formatDate = (dateString) => {
 };
 
 /**
- * Returns a simple numeric date (e.g., "01/15/2024")
+ * Returns a simple numeric date like "01/15/2024".
+ * Used in the Date Picker field when adding an expense.
  */
 export const formatNumericDate = (dateString) => {
   if (!dateString) return '';

@@ -1,3 +1,11 @@
+/**
+ * HomeScreen.js
+ * 
+ * This is the main dashboard of the app. It's the first thing users see 
+ * after onboarding. It shows their overall balance, recent transactions, 
+ * and gives quick access to settings and theme toggling.
+ */
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, StatusBar, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,12 +23,8 @@ import { formatCurrency } from '../utils/formatCurrency';
 import { triggerHaptic } from '../utils/haptics';
 import { exportExpensesToCSV } from '../utils/csvExporter';
 
-/**
- * HomeScreen: The main dashboard.
- * Standardized using constants and enhanced with haptic feedback.
- * Features: Budget Management, Theme Toggle, CSV Export, and App Reset.
- */
 const HomeScreen = () => {
+  // Getting everything we need from our global "brain" (Context)
   const { theme, isDarkMode, toggleTheme } = useTheme();
   const { 
     expenses = [], 
@@ -33,10 +37,11 @@ const HomeScreen = () => {
   } = useExpenses();
   const navigation = useNavigation();
 
+  // Local state for the settings modal and the budget input
   const [modalVisible, setModalVisible] = useState(false);
   const [newBudget, setNewBudget] = useState(totalIncome.toString());
   
-  // Custom Alert State
+  // Custom Alert State to make popups look pretty and match the theme
   const [alertConfig, setAlertConfig] = useState({
     visible: false,
     title: '',
@@ -54,6 +59,7 @@ const HomeScreen = () => {
     setAlertConfig(prev => ({ ...prev, visible: false }));
   };
 
+  // Just show the 5 most recent items so the home screen doesn't get cluttered
   const recentExpenses = expenses.slice(0, 5);
 
   const handleUpdateBudget = () => {
@@ -64,7 +70,7 @@ const HomeScreen = () => {
     }
     setIncome(amount);
     setModalVisible(false);
-    triggerHaptic('success');
+    triggerHaptic('success'); // Little vibration for feedback
     showAlert('Success', 'Your monthly budget has been updated.', 'success');
   };
 
@@ -95,7 +101,7 @@ const HomeScreen = () => {
     <View style={[styles.container, { backgroundColor: theme.bgSecondary }]}>
       <StatusBar barStyle="light-content" />
       
-      {/* Header Background */}
+      {/* Branded Header: I used the brand color here to make it look professional */}
       <View style={[styles.headerBg, { backgroundColor: theme.bgBrand }]}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
@@ -107,6 +113,7 @@ const HomeScreen = () => {
             </View>
             
             <View style={styles.headerActions}>
+              {/* Settings button to change budget or export data */}
               <TouchableOpacity 
                 onPress={() => {
                   triggerHaptic('medium');
@@ -118,6 +125,7 @@ const HomeScreen = () => {
                 <Ionicons name="settings-outline" size={FontSize.lg} color={theme.textInverse} />
               </TouchableOpacity>
 
+              {/* Theme toggle button (Sun/Moon) */}
               <TouchableOpacity 
                 onPress={onToggleTheme}
                 style={[styles.iconButton, { backgroundColor: 'rgba(255,255,255,0.2)' }]}
@@ -138,6 +146,7 @@ const HomeScreen = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {/* The Balance Card - uses a separate component to keep this file clean */}
         <View style={styles.statWrapper}>
           <StatCard 
             title="Total Balance" 
@@ -166,6 +175,7 @@ const HomeScreen = () => {
           </Text>
         </View>
 
+        {/* Listing the actual transactions */}
         {recentExpenses.length > 0 ? (
           recentExpenses.map((expense) => (
             <ExpenseCard 
@@ -178,6 +188,7 @@ const HomeScreen = () => {
             />
           ))
         ) : (
+          // Nice empty state so the screen doesn't look broken
           <View style={styles.emptyContainer}>
             <Ionicons name="receipt-outline" size={48} color={theme.textMuted} style={{ marginBottom: Spacing.sm }} />
             <Text style={[styles.emptyText, { color: theme.textSecondary }]}>
@@ -186,10 +197,11 @@ const HomeScreen = () => {
           </View>
         )}
         
+        {/* Extra space for the floating action button at the bottom */}
         <View style={{ height: 120 }} />
       </ScrollView>
 
-      {/* Settings Modal */}
+      {/* Settings Modal - Popover for budget and profile actions */}
       <Modal animationType="fade" transparent visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: theme.cardBg }]}>
@@ -220,7 +232,7 @@ const HomeScreen = () => {
 
             <View style={styles.divider} />
 
-            {/* Export CSV Option */}
+            {/* CSV Export Option */}
             <TouchableOpacity style={styles.menuOption} onPress={handleExportCSV}>
               <View style={[styles.optionIcon, { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : '#F0F9FF' }]}>
                 <Ionicons name="download-outline" size={20} color={theme.textBrand} />
@@ -230,6 +242,7 @@ const HomeScreen = () => {
 
             <View style={styles.divider} />
 
+            {/* Resetting the app back to onboarding */}
             <TouchableOpacity style={styles.menuOption} onPress={handleResetApp}>
               <View style={[styles.optionIcon, { backgroundColor: theme.danger + '10' }]}>
                 <Ionicons name="refresh-circle-outline" size={20} color={theme.danger} />
@@ -244,8 +257,10 @@ const HomeScreen = () => {
         </View>
       </Modal>
 
+      {/* Our custom Alert component */}
       <CustomAlert {...alertConfig} onClose={closeAlert} />
 
+      {/* Floating Action Button (FAB) for adding new expenses */}
       <FAB onPress={() => {
         triggerHaptic('medium');
         navigation.navigate('AddExpense');
